@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Заказ{% endblock %}
+{% block content %}
+    <div class="row">
+            <div class="col-md-5 mb-3 mt-1">
+                    <div class="card">
+                            <div class="card-body">
+                                    <div class="h2">
+                                         Номер вашего заказа: {{ order.id }}
+                                    </div>
+                                    <div class="h3 text-muted">
+                                         <a><strong class="d-block text-gray-dark">Компания: {{ order.company_name }}</strong></a>
+                                         <a><strong class="d-block text-gray-dark">Категория: {{ order.category }}</strong></a>
+                                    </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                            <div class="h6 text-muted">
+                                            Количество транзакций: {{ order.transactions_number }} <br />
+                                            Количество клиентов: {{ order.clients_number }}
+                                            </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                            <div class="h6 text-muted">
+                                            Дата начала: {{ order.date_start }} <br />
+                                            Дата окончания: {{ order.date_end }} <br />
+                                            Всего дней: {{ order.days }}
+                                            </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                            <div class="h6 text-muted">
+                                                Ожидаемая цена услуги:
+                                                {{ order.price }}
+                                            </div>
+                                    </li>
+                            </ul>
+                            <a class="btn btn-lg btn-primary"
+                                role="button">
+                                Скачать аналитику
+                            </a>
+                    </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="card mb-3 mt-1 shadow-sm">
+                        <div class="card-body">
+                                <p class="card-text">
+                                        <!-- Ссылка на автора через @ -->
+                                        <a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то<a>
+                                                <strong class="d-block text-gray-dark">Какая аналитика</strong>
+                                        </a>
+                                        статистика какая-то
+                                </p>
+                        </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}

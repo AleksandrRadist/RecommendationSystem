@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Сделать заказ{% endblock %}
+{% block content %}
+{% load analytics_filters %}
+<div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+        <div class="card">
+            <div class="card-header">Create Order</div>
+            <div class="card-body">
+
+                    {% for error in form.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="form-group row" aria-required={% if field.required %}"true"{% else %}"false"{% endif %}>
+                                <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label text-md-right">{{ field.label }}{% if field.required %}<span class="required">*</span>{% endif %}</label>
+                                <div class="col-md-6">
+                                    {{ field|addclass:"form-control" }}
+                                    {% if field.help_text %}
+                                    <small id="{{ field.id_for_label }}-help" class="form-text text-muted">{{ field.help_text|safe }}</small>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                <a>Создать</a>
+                            </button>
+                    </div>
+                </form>
+            </div> <!-- card body -->
+        </div> <!-- card -->
+    </div> <!-- col -->
+</div> <!-- row -->
+
+{% endblock %}
