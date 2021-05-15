@@ -1,10 +1,9 @@
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
 import csv
 import datetime
 import pytz
+import uuid
 from .models import Client, Category, Transaction, Subscription, Order
 from .forms import OrderForm
 
@@ -91,6 +90,7 @@ def new_order(request):
             order_new.days = delta.days + 1
             price = order_new.days // 7 + 1 * 20 * order_new.clients_number
             order_new.price = price
+            order_new.code = uuid.uuid4().hex[:10].upper()
             order_new.save()
             return redirect('order', order_id=order_new.pk)
 
@@ -107,4 +107,25 @@ def order_page(request, order_id):
 
 
 def index(request):
+    if request.method == 'POST':
+        order_code = request.POST.get('search', '')
+        try:
+            order = Order.objects.get(code=order_code)
+            return redirect('order', order.id)
+        except Order.DoesNotExist:
+            return render(request, 'index.html', {'flag': 1})
     return render(request, 'index.html')
+
+
+def categories(request):
+    items = Category.objects.all()
+    return render(request, 'category_list.html',
+                  {'items': items})
+
+
+def order_download(request):
+    ingredient_txt = ['u are trash']
+    file = 'stats.txt'
+    response = HttpResponse(ingredient_txt, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename={file}'
+    return response

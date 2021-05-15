@@ -1,0 +1,16 @@
+<div class="card mb-3 mt-1 shadow-sm">
+        <div class="card-body">
+                <p class="card-text">
+                    <a>
+                        <strong class="d-block text-gray-dark">Название категории: </strong>{{ category.name }}
+                    </a>
+                    <a>
+                        <strong class="d-block text-gray-dark">Что включает: </strong>{{ category.description|linebreaksbr }}
+                    </a>
+
+                    <a class="card-link muted">
+                        <strong class="d-block text-gray-dark">МСС-коды: </strong>{{ category.mcc_code }}
+                    </a>
+                </p>
+        </div>
+</div>

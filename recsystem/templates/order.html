@@ -2,11 +2,11 @@
 {% block title %}Заказ{% endblock %}
 {% block content %}
     <div class="row">
-            <div class="col-md-5 mb-3 mt-1">
+            <div class="col-md-4 mb-3 mt-1">
                     <div class="card">
                             <div class="card-body">
                                     <div class="h2">
-                                         Номер вашего заказа: {{ order.id }}
+                                         Код заказа: {{ order.code }}
                                     </div>
                                     <div class="h3 text-muted">
                                          <a><strong class="d-block text-gray-dark">Компания: {{ order.company_name }}</strong></a>
@@ -35,13 +35,13 @@
                                     </li>
                             </ul>
                             <a class="btn btn-lg btn-primary"
-                                role="button">
+                                role="button" href="{% url 'order_download' %}">
                                 Скачать аналитику
                             </a>
                     </div>
             </div>
 
-            <div class="col-md-7">
+            <div class="col-md-8">
                 <div class="card mb-3 mt-1 shadow-sm">
                         <div class="card-body">
                                 <p class="card-text">

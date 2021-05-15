@@ -2,29 +2,55 @@
 {% block title %}Главная{% endblock %}
 {% block content %}
     <div class="row">
-            <div class="col-md-12 mb-3 mt-3">
-                    <div class="card">
-                            <div class="card-body">
-                                    <div class="h2">
-                                         Рекомендательная система для продвижения партнерских услуг физическим лицам коммерческого банка на основе данных их транзакций
-                                    </div>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                            <div class="h6 text-muted">
-                                            Проект выполнили:  <br />
-                                             <br />
-                                            Поликарпов Кирилл  <br />
-                                            Хан Александр  <br />
-                                            Шрамко Владислав  <br />
-                                            Озбетелашвили Георгий
-                                            </div>
-                                           <div class="h6 text-muted">
-                                               Под руководством Косарева Ильи Максимовича
-                                           </div>
-                                    </li>
-                            </ul>
-                    </div>
+        <div class="col-md-12 mb-3 mt-3">
+            <div class="card">
+                <div class="card-body">
+                        <div class="h2">
+                             Рекомендательная система для продвижения партнерских услуг физическим лицам коммерческого банка на основе данных их транзакций
+                        </div>
+                </div>
+                <ul class="list-group list-group-flush">
+
+
+                    <li class="list-group-item">
+                        <form method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                             <a class="p text-dark">Поиск заказа</a> <br/>
+                            <input id="search-input" type="search" class="form-control-sm" name="search"/>
+
+                            <button type="submit" class="btn btn-primary">
+                                <a>Искать</a>
+                            </button>
+                            {% if flag %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <strong>Заказа с таким кодом не существует!</strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endif %}
+
+                        </form>
+                    </li>
+
+                </ul>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="h6 text-muted">
+                            Проект выполнили:  <br />
+                             <br />
+                            Поликарпов Кирилл  <br />
+                            Хан Александр  <br />
+                            Шрамко Владислав  <br />
+                            Озбетелашвили Георгий
+                        </div>
+                        <div class="h6 text-muted">
+                           Под руководством Косарева Ильи Максимовича
+                        </div>
+                    </li>
+                </ul>
             </div>
+        </div>
     </div>
 {% endblock %}
+

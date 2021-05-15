@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %} Категории {% endblock %}
+{% block content %}
+    <div class="container">
+        <h1> Категории </h1>
+        {% for item in items %}
+            {% include "item.html" with category=item %}
+        {% endfor %}
+    </div>
+{% endblock %}

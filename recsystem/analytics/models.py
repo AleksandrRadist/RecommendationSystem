@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 
+
 class Client(models.Model):
     id = models.IntegerField(primary_key=True)
     fullname = models.CharField(max_length=50)
@@ -46,6 +47,7 @@ class Subscription(models.Model):
 
 
 class Order(models.Model):
+    code = models.CharField(unique=True, max_length=10)
     company_name = models.CharField(max_length=100, default='')
     CATEGORY_CHOICES = [
         ('Каршеринг', 'Каршеринг'),
