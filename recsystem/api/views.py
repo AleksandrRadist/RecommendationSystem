@@ -41,8 +41,8 @@ def api_orders(request):
 
 
 @api_view(['GET'])
-def api_orders_client(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
+def api_orders_client(request, code):
+    order = get_object_or_404(Order, code=code)
     if request.method == 'GET':
         serializer = OrderClientSerializer(order)
         return Response(serializer.data)
