@@ -1,0 +1,229 @@
+openapi: 3.0.2
+info:
+  title: 'Recommendation System REST API'
+  version: ''
+  description: |
+    Запросы к API начинаются с `/api/`
+    # Описание
+    Рекомендательная система для продвижения партнерских услуг физическим лицам коммерческого банка на основе данных их транзакций
+    # Логика
+    - При помощи API можно создать заказ, получить данные о всех подтвержднных заказах или об конкректном заказе.
+    - Также, отдельно для клиентов есть ресурс, дающий информацию об конкретной заказес ограничениями.
+
+
+tags:
+  - name: ORDERS
+    description: Заказы на рекламу
+
+paths:
+
+
+
+  /orders/:
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Список всех подтвержденных заказов
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    status:
+                      type: bool
+    post:
+      tags:
+        - ORDERS
+      description: |
+        Создать заказ
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  company_name:
+                    type: string
+                  category:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  status:
+                    type: bool
+        400:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /orders/{order_id}/:
+    parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: ID объекта
+        schema:
+          type: number
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Информация об заказе
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  status:
+                    type: bool
+        404:
+          description: Объект не найден
+  /orders/{order_id}/client/:
+    parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: ID объекта
+        schema:
+          type: number
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Информация об заказе для клиента
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  status:
+                    type: bool
+        404:
+          description: Объект не найден
+
+
+components:
+  schemas:
+
+
+
+    ValidationError:
+      title: Ошибка валидации
+      type: object
+      properties:
+        field_name:
+          type: array
+          items:
+            type: string
+
+

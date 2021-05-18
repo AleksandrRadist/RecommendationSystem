@@ -1,10 +1,12 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-from analytics.models import Order, Category, Transaction
-from .serializers import (OrderSerializer, OrderClientSerializer, OrderCreateSerializer)
 import uuid
+
+from analytics.models import Order, Category, Transaction
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from .serializers import (OrderSerializer, OrderClientSerializer)
 
 
 @api_view(['POST', "GET"])
@@ -40,7 +42,7 @@ def api_orders(request):
 
 @api_view(['GET'])
 def api_orders_client(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
     if request.method == 'GET':
         serializer = OrderClientSerializer(order)
         return Response(serializer.data)
@@ -48,7 +50,7 @@ def api_orders_client(request, order_id):
 
 @api_view(['GET'])
 def api_orders_detail(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
     if request.method == 'GET':
         serializer = OrderSerializer(order)
         return Response(serializer.data)
