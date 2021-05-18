@@ -22,7 +22,7 @@ class Category(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
-    mcc_code = models.CharField(max_length=100)
+    mcc_code = models.CharField(max_length=300)
 
 
 class Transaction(models.Model):
@@ -83,7 +83,9 @@ class Order(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=50)
     transactions_number = models.IntegerField(default=0)
     clients_number = models.IntegerField(default=0)
+    clients = models.JSONField(null=True, blank=True)
     date_start = models.DateField(default=datetime.date.today)
     date_end = models.DateField(default=datetime.date.today)
     days = models.IntegerField(default=0)
     price = models.FloatField(default=0)
+    status = models.BooleanField(default=False)

@@ -34,6 +34,17 @@
                                             </div>
                                     </li>
                             </ul>
+                            {% if order.status == False %}
+                            <a class="btn btn-lg btn-success"
+                                role="button" href="{% url 'order_confirm' order.id %}">
+                                Подтвердить заказ
+                            </a>
+                            {% else %}
+                            <a class="btn btn-lg btn-danger"
+                                role="button" href="{% url 'order_cancel' order.id %}">
+                                Отменить заказ
+                            </a>
+                            {% endif %}
                             <a class="btn btn-lg btn-primary"
                                 role="button" href="{% url 'order_download' %}">
                                 Скачать аналитику

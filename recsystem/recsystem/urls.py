@@ -10,6 +10,7 @@ admin.autodiscover()
 admin.site.enable_nav_sidebar = False
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
     path('', include('analytics.urls')),
 ]
 if settings.DEBUG:

@@ -76,23 +76,27 @@ def load(request):
     return render(request, 'index.html')
 
 
-def new_order(request):
+def order_new(request):
     if request.method == 'POST':
         form = OrderForm(request.POST or None)
 
         if form.is_valid():
-            order_new = form.save(commit=False)
-            category_id = Category.objects.filter(name=order_new.category)
+            order = form.save(commit=False)
+            category_id = Category.objects.filter(name=order.category)
             transactions = Transaction.objects.filter(product_category__in=category_id)
-            order_new.transactions_number = transactions.count()
-            order_new.clients_number = transactions.values('client_id').distinct().count()
-            delta = order_new.date_end - order_new.date_start
-            order_new.days = delta.days + 1
-            price = order_new.days // 7 + 1 * 20 * order_new.clients_number
-            order_new.price = price
-            order_new.code = uuid.uuid4().hex[:10].upper()
-            order_new.save()
-            return redirect('order', order_id=order_new.pk)
+            order.transactions_number = transactions.count()
+            clients = []
+            for i in transactions.values('client_id').distinct():
+                clients.append(i['client_id'])
+            order.clients = clients
+            order.clients_number = len(order.clients)
+            delta = order.date_end - order.date_start
+            order.days = delta.days + 1
+            price = order.days // 7 + 1 * 20 * order.clients_number
+            order.price = price
+            order.code = uuid.uuid4().hex[:10].upper()
+            order.save()
+            return redirect('order', order_id=order.pk)
 
         return render(request, 'new_order.html', {'form': form})
 
@@ -104,6 +108,20 @@ def order_page(request, order_id):
     order = Order.objects.get(id=order_id)
     return render(request, 'order.html',
                   {'order': order})
+
+
+def order_confirm(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = True
+    order.save()
+    return redirect('order', order_id=order_id)
+
+
+def order_cancel(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = False
+    order.save()
+    return redirect('order', order_id=order_id)
 
 
 def index(request):
