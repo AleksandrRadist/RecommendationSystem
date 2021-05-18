@@ -94,7 +94,7 @@ def order_new(request):
             order.clients_number = len(order.clients)
             delta = order.date_end - order.date_start
             order.days = delta.days + 1
-            price = order.days // 7 + 1 * 20 * order.clients_number
+            price = (order.days // 7 + 1) * 20 * order.clients_number
             order.price = price
             order.code = uuid.uuid4().hex[:10].upper()
             order.save()

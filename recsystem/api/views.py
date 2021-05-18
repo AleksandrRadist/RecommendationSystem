@@ -24,7 +24,7 @@ def api_orders(request):
             clients_number = len(clients)
             delta = serializer.validated_data['date_end'] - serializer.validated_data['date_start']
             days = delta.days + 1
-            price = days // 7 + 1 * 20 * clients_number
+            price = (days // 7 + 1) * 20 * clients_number
             code = uuid.uuid4().hex[:10].upper()
             serializer.save(transactions_number=transactions_number,
                             clients=clients,
