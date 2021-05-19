@@ -1,7 +1,7 @@
 import csv
 import datetime
 import uuid
-
+from django.shortcuts import get_object_or_404
 import pytz
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -84,8 +84,8 @@ def order_new(request):
 
         if form.is_valid():
             order = form.save(commit=False)
-            category_id = Category.objects.filter(name=order.category)
-            transactions = Transaction.objects.filter(product_category__in=category_id)
+            category = Category.objects.get(name=order.category)
+            transactions = Transaction.objects.filter(product_category=category.id)
             order.transactions_number = transactions.count()
             clients = []
             for i in transactions.values('client_id').distinct():
@@ -107,20 +107,20 @@ def order_new(request):
 
 
 def order_page(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
     return render(request, 'order.html',
                   {'order': order})
 
 
 def order_confirm(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
     order.status = True
     order.save()
     return redirect('order', order_id=order_id)
 
 
 def order_cancel(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = get_object_or_404(Order, id=order_id)
     order.status = False
     order.save()
     return redirect('order', order_id=order_id)

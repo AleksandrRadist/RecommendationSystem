@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import datetime
 import os
 import environ
 env = environ.Env()
@@ -57,7 +57,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
 ROOT_URLCONF = 'recsystem.urls'
 
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates").replace('\\','/')
@@ -78,7 +82,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'recsystem.wsgi.application'
-
+JWT_AUTH = {
+    # how long the original token is valid for
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=2)
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

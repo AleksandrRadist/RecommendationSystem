@@ -4,20 +4,53 @@ info:
   version: ''
   description: |
     Запросы к API начинаются с `/api/`
+    # Вернуться на сайт
+    [Назад](http://81.88.118.62/)
     # Описание
     Рекомендательная система для продвижения партнерских услуг физическим лицам коммерческого банка на основе данных их транзакций
     # Логика
-    - При помощи API можно создать заказ, получить данные о всех подтвержднных заказах или об конкректном заказе.
-    - Также, отдельно для клиентов есть ресурс, дающий информацию об конкретной заказес ограничениями.
-
+    - При помощи API авториованные пользователи могут создать заказ, получить данные о всех подтвержднных заказах или о конкректном заказе.
+    - Также, отдельно для клиентов есть ресурс, дающий право создавать заказы, но получать ограниченную информаюцию в ответе и получать ограниченную информацию о конкретном заказе.
 
 tags:
+  - name: AUTH
+    description: Авторизация
   - name: ORDERS
     description: Заказы на рекламу
 
 paths:
 
-
+  /auth/token/:
+    post:
+      tags:
+        - AUTH
+      description: Получение токена для авторизации в обмен на username и password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  writeOnly: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+          description: ''
+        400:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
 
   /orders/:
     get:
@@ -59,6 +92,13 @@ paths:
                       type: number
                     status:
                       type: bool
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
     post:
       tags:
         - ORDERS
@@ -116,6 +156,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - write:admin
+
   /orders/{order_id}/:
     parameters:
       - name: order_id
@@ -128,7 +176,10 @@ paths:
       tags:
         - ORDERS
       description: |
-        Информация об заказе
+        Информация о заказе
+      security:
+      - jwt_auth:
+        - read:admin
       responses:
         200:
           description: Объект
@@ -163,7 +214,68 @@ paths:
                     type: bool
         404:
           description: Объект не найден
-  /orders/{order_id}/client/:
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+  /orders/public/:
+    post:
+      tags:
+        - ORDERS
+      description: |
+        Создать заказ
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  company_name:
+                    type: string
+                  category:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  status:
+                    type: bool
+        400:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /orders/public/{code}/:
     parameters:
       - name: order_id
         in: path
@@ -175,7 +287,7 @@ paths:
       tags:
         - ORDERS
       description: |
-        Информация об заказе для клиента
+        Ограниченная информация о заказе для клиентов
       responses:
         200:
           description: Объект
@@ -184,20 +296,14 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: number
                   company_name:
                     type: string
                   category:
-                    type: string
-                  code:
                     type: string
                   transactions_number:
                     type: number
                   clients_number:
                     type: number
-                  clients:
-                    type: string
                   date_start:
                     type: string (YYYY--mm-dd)
                   date_end:
@@ -212,9 +318,20 @@ paths:
           description: Объект не найден
 
 
+
+
+
+
+
 components:
   schemas:
-
+    Token:
+      title: Токен
+      type: object
+      properties:
+        token:
+          type: string
+          title: access токен
 
 
     ValidationError:
@@ -225,5 +342,10 @@ components:
           type: array
           items:
             type: string
+  securitySchemes:
+    jwt_auth:
+      type: apiKey
+      name: Bearer
+      in: header
 
 
