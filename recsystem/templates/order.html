@@ -9,41 +9,60 @@
                                          Код заказа: {{ order.code }}
                                     </div>
                                     <div class="h3 text-muted">
-                                         <a><strong class="d-block text-gray-dark">Компания: {{ order.company_name }}</strong></a>
-                                         <a><strong class="d-block text-gray-dark">Категория: {{ order.category }}</strong></a>
+                                         <a><strong class="d-block text-dark">Компания: {{ order.company_name }}</strong></a>
+                                         <a><strong class="d-block text-dark">Категория: {{ order.category }}</strong></a>
                                     </div>
                             </div>
                             <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                            <div class="h6 text-muted">
+                                            <div class="h6 text-primary">
                                             Количество транзакций: {{ order.transactions_number }} <br />
                                             Количество клиентов: {{ order.clients_number }}
                                             </div>
                                     </li>
                                     <li class="list-group-item">
-                                            <div class="h6 text-muted">
+                                            <div class="h6 text-primary">
                                             Дата начала: {{ order.date_start }} <br />
                                             Дата окончания: {{ order.date_end }} <br />
                                             Всего дней: {{ order.days }}
                                             </div>
                                     </li>
                                     <li class="list-group-item">
-                                            <div class="h6 text-muted">
+                                            <div class="h6 text-primary">
                                                 Ожидаемая цена услуги:
                                                 {{ order.price }} ₽
                                             </div>
                                     </li>
+                                    {% if order.confirmation_status == True %}
+                                            <li class="list-group-item">
+                                                    {% if order.completion_status %}
+                                                    <div class="h6 text-success">
+                                                        Ваш заказ выполнен!
+                                                    </div>
+                                                    {% elif order.acceptance_status %}
+                                                    <div class="h6 text-success">
+                                                        Ваш заказ принят!
+                                                    </div>
+                                                    {% else %}
+                                                    <div class="h6 text-warning">
+                                                        Ваш заказ ожидает рассмотрения.
+                                                    </div>
+                                                    {% endif %}
+                                            </li>
+                                    {% endif %}
                             </ul>
-                            {% if order.status == False %}
+                            {% if not order.acceptance_status %}
+                            {% if order.confirmation_status == False %}
                             <a class="btn btn-lg btn-success"
                                 role="button" href="{% url 'order_confirm' order.id %}">
                                 Подтвердить заказ
                             </a>
-                            {% else %}
+                            {% else%}
                             <a class="btn btn-lg btn-danger"
                                 role="button" href="{% url 'order_cancel' order.id %}">
                                 Отменить заказ
                             </a>
+                            {% endif %}
                             {% endif %}
                             <a class="btn btn-lg btn-primary"
                                 role="button" href="{% url 'order_download' %}">

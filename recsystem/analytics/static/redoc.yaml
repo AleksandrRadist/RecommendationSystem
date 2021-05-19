@@ -95,6 +95,8 @@ paths:
                       type: number
                     company_name:
                       type: string
+                    email:
+                      type: string
                     category:
                       type: string
                     code:
@@ -113,8 +115,20 @@ paths:
                       type: number
                     price:
                       type: number
-                    status:
+                    confirmation_status:
                       type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+
+
         401:
           description: Необходим JWT токен
         403:
@@ -135,6 +149,8 @@ paths:
                 properties:
                   company_name:
                     type: string
+                  email:
+                    type: string
                   category:
                     type: string
                   date_start:
@@ -147,32 +163,46 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  company_name:
-                    type: string
-                  category:
-                    type: string
-                  code:
-                    type: string
-                  transactions_number:
-                    type: number
-                  clients_number:
-                    type: number
-                  clients:
-                    type: string
-                  date_start:
-                    type: string (YYYY--mm-dd)
-                  date_end:
-                    type: string (YYYY--mm-dd)
-                  days:
-                    type: number
-                  price:
-                    type: number
-                  status:
-                    type: bool
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
         400:
           description: Ошибка
           content:
@@ -209,11 +239,223 @@ paths:
           content:
             application/json:
               schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+        404:
+          description: Объект не найден
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+
+  /orders/{order_id}/complete/:
+    parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: ID объекта
+        schema:
+          type: number
+    post:
+      tags:
+        - ORDERS
+      description: |
+        Отметить выполнение заказа
+      security:
+      - jwt_auth:
+        - write:admin
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+        208:
+          description: Заказ уже выполнен
+        404:
+          description: Объект не найден
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+        409:
+          description: Нельзя отметить выполнение неподтвержденного или непринятого заказа
+
+  /orders/{order_id}/accept/:
+    parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: ID объекта
+        schema:
+          type: number
+    post:
+      tags:
+        - ORDERS
+      description: |
+        Отметить принятие заказа
+      security:
+      - jwt_auth:
+        - write:admin
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+        208:
+          description: Заказ уже принят или выполнен
+        404:
+          description: Объект не найден
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+        409:
+          description: Нельзя принять неподтвержденный заказ
+
+  /orders/{code}/confirm/:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Код заказа
+        schema:
+          type: string
+    post:
+      tags:
+        - ORDERS
+      description: |
+        Подтвердить заказ
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
-                  id:
-                    type: number
                   company_name:
+                    type: string
+                  email:
                     type: string
                   category:
                     type: string
@@ -223,8 +465,6 @@ paths:
                     type: number
                   clients_number:
                     type: number
-                  clients:
-                    type: string
                   date_start:
                     type: string (YYYY--mm-dd)
                   date_end:
@@ -233,14 +473,62 @@ paths:
                     type: number
                   price:
                     type: number
-                  status:
+                  confirmation_status:
+                    type: bool
+                  completion_status:
                     type: bool
         404:
           description: Объект не найден
-        401:
-          description: Необходим JWT токен
-        403:
-          description: Нет прав доступа
+
+  /orders/{code}/cancel/:
+    parameters:
+      - name: code
+        in: path
+        required: true
+        description: Код заказа
+        schema:
+          type: string
+    post:
+      tags:
+        - ORDERS
+      description: |
+        Отменить заказ
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  company_name:
+                    type: string
+                  email:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  confirmation_status:
+                    type: bool
+                  completion_status:
+                    type: bool
+        404:
+          description: Объект не найден
+        409:
+          description: Нельзя отменить выполненный или принятый заказ
   /orders/public/:
     post:
       tags:
@@ -269,9 +557,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: number
                   company_name:
+                    type: string
+                  email:
                     type: string
                   category:
                     type: string
@@ -289,7 +577,9 @@ paths:
                     type: number
                   price:
                     type: number
-                  status:
+                  confirmation_status:
+                    type: bool
+                  completion_status:
                     type: bool
         400:
           description: Ошибка
@@ -300,10 +590,10 @@ paths:
 
   /orders/public/{code}/:
     parameters:
-      - name: order_id
+      - name: code
         in: path
         required: true
-        description: ID объекта
+        description: Код заказа
         schema:
           type: number
     get:
@@ -321,7 +611,11 @@ paths:
                 properties:
                   company_name:
                     type: string
+                  email:
+                    type: string
                   category:
+                    type: string
+                  code:
                     type: string
                   transactions_number:
                     type: number
@@ -335,7 +629,9 @@ paths:
                     type: number
                   price:
                     type: number
-                  status:
+                  confirmation_status:
+                    type: bool
+                  completion_status:
                     type: bool
         404:
           description: Объект не найден

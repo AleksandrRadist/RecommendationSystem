@@ -33,6 +33,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'category',)
+    readonly_fields = ('creation_date',)
     empty_value_display = '-пусто-'
 
 

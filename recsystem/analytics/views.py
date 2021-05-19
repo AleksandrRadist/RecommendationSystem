@@ -114,14 +114,16 @@ def order_page(request, order_id):
 
 def order_confirm(request, order_id):
     order = get_object_or_404(Order, id=order_id)
-    order.status = True
+    order.confirmation_status = True
     order.save()
     return redirect('order', order_id=order_id)
 
 
 def order_cancel(request, order_id):
     order = get_object_or_404(Order, id=order_id)
-    order.status = False
+    if order.acceptance_status:
+        return redirect('order', order_id=order_id)
+    order.confirmation_status = False
     order.save()
     return redirect('order', order_id=order_id)
 
