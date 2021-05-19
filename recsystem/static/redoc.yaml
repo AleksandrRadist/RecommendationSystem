@@ -80,7 +80,7 @@ paths:
       tags:
         - ORDERS
       description: |
-        Список всех подтвержденных заказов
+        Список всех заказов
       responses:
         200:
           description: Список объектов
@@ -216,6 +216,188 @@ paths:
       security:
       - jwt_auth:
         - write:admin
+
+  /orders/confirmed/:
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Список всех подтвержденных заказов
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
+
+
+  /orders/accepted/:
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Список всех принятых заказов
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
+
+
+  /orders/completed/:
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Список всех выполненных заказов
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    company_name:
+                      type: string
+                    email:
+                      type: string
+                    category:
+                      type: string
+                    code:
+                      type: string
+                    transactions_number:
+                      type: number
+                    clients_number:
+                      type: number
+                    clients:
+                      type: string
+                    date_start:
+                      type: string (YYYY--mm-dd)
+                    date_end:
+                      type: string (YYYY--mm-dd)
+                    days:
+                      type: number
+                    price:
+                      type: number
+                    confirmation_status:
+                      type: bool
+                    completion_status:
+                      type: bool
+                    creation_date:
+                      type: string
+                    completion_date:
+                      type: string
+                    acceptance_status:
+                      type: bool
+                    acceptance_date:
+                      type: string
+        401:
+          description: Необходим JWT токен
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
 
   /orders/{order_id}/:
     parameters:
