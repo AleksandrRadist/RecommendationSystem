@@ -19,7 +19,6 @@ tags:
     description: Заказы на рекламу
 
 paths:
-
   /auth/token/:
     post:
       tags:
@@ -45,12 +44,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/Token'
           description: ''
-        400:
-          description: Ошибка
+        401:
+          description: No active account found with the given credentials
+  /auth/token/refresh/:
+    post:
+      tags:
+        - AUTH
+      description: Обновление токена
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - refresh
+              properties:
+                refresh:
+                  type: string
+      responses:
+        200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationError'
+                type: object
+                properties:
+                  access:
+                    type: string
+                    title: access токен
+          description: ''
+        401:
+          description: Token is invalid or expired
+
 
   /orders/:
     get:
@@ -329,9 +352,12 @@ components:
       title: Токен
       type: object
       properties:
-        token:
+        access:
           type: string
           title: access токен
+        refresh:
+          type: string
+          title: update токен
 
 
     ValidationError:
