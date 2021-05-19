@@ -5,6 +5,7 @@ Django==3.2.3
 django-environ==0.4.5
 django-tempus-dominus==5.1.2.13
 djangorestframework==3.12.4
+djangorestframework-simplejwt==4.6.0
 kiwisolver==1.3.1
 matplotlib==3.4.2
 nose==1.3.7
@@ -12,6 +13,7 @@ numpy==1.20.3
 pandas==1.2.4
 Pillow==8.2.0
 psycopg2-binary==2.8.6
+PyJWT==2.1.0
 pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2021.1
