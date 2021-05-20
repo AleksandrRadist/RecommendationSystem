@@ -86,16 +86,18 @@
                                     {% endif %}
                             </ul>
                             {% if request.user.is_authenticated %}
-                                {% if not order.acceptance_status %}
-                                    <a class="btn btn-lg btn-success"
-                                        role="button" href="{% url 'order_accept' order.id %}">
-                                        Принять заказ
-                                    </a>
-                                {% elif not order.completion_status %}
-                                    <a class="btn btn-lg btn-success"
-                                        role="button" href="{% url 'order_complete' order.id %}">
-                                        Выполнить заказ
-                                    </a>
+                                {% if order.confirmation_status %}
+                                    {% if not order.acceptance_status  %}
+                                        <a class="btn btn-lg btn-success"
+                                            role="button" href="{% url 'order_accept' order.id %}">
+                                            Принять заказ
+                                        </a>
+                                    {% elif not order.completion_status %}
+                                        <a class="btn btn-lg btn-success"
+                                            role="button" href="{% url 'order_complete' order.id %}">
+                                            Выполнить заказ
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                                 {% if message %}
                                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
