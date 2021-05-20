@@ -2,7 +2,7 @@
 {% block title %} Все заказы {% endblock %}
 {% block content %}
     <div class="container">
-        {% include "menu.html" with page=1 %}
+        {% include "menu.html" %}
         <h1> Все заказы </h1>
         {% for order in orders %}
             {% include "order_item.html" with order=order %}

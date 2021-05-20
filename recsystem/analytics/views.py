@@ -204,7 +204,7 @@ def order_download(request):
 
 @login_required
 def confirmed_orders(request):
-    orders = Order.objects.filter(confirmation_status=True).order_by('-creation_date')
+    orders = Order.objects.filter(confirmation_status=True, acceptance_status=False).order_by('-creation_date')
     return render(request, 'confirmed_orders.html',
                   {'orders': orders})
 
@@ -218,7 +218,7 @@ def all_orders(request):
 
 @login_required
 def accepted_orders(request):
-    orders = Order.objects.filter(acceptance_status=True).order_by('-acceptance_date')
+    orders = Order.objects.filter(acceptance_status=True, completion_status=False).order_by('-acceptance_date')
     return render(request, 'accepted_orders.html',
                   {'orders': orders})
 
@@ -227,4 +227,11 @@ def accepted_orders(request):
 def completed_orders(request):
     orders = Order.objects.filter(completion_status=True).order_by('-completion_date')
     return render(request, 'completed_orders.html',
+                  {'orders': orders})
+
+
+@login_required
+def unconfirmed_orders(request):
+    orders = Order.objects.filter(confirmation_status=False).order_by('-creation_date')
+    return render(request, 'unconfirmed_orders.html',
                   {'orders': orders})

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %} Приянтые заказы {% endblock %}
+{% block title %} Неподтвержденные заказы {% endblock %}
 {% block content %}
     <div class="container">
         {% include "menu.html" %}
-        <h1> Принятые заказы </h1>
+        <h1> Неподтвержденные заказы </h1>
         {% for order in orders %}
             {% include "order_item.html" with order=order %}
         {% endfor %}
-                {% if not orders %}
+        {% if not orders %}
         <div class="card mb-3 mt-1 shadow-sm">
 
                 <div class="card-body">
                         <p class="card-text">
-                                Принятых заказов нет
+                                Неподтвержденных заказов нет
                         </p>
 
                 </div>

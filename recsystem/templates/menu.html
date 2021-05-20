@@ -2,16 +2,19 @@
 <div class="row">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link {% if page == 1 %}active{% endif %}" href="{% url 'all_orders' %}">Все заказы</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'all_orders' %}active{% endif %}" href="{% url 'all_orders' %}">Все заказы</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if page == 2 %}active{% endif %}" href="{% url 'confirmed_orders' %}">Подтвержденные заказы</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'unconfirmed_orders' %}active{% endif %}" href="{% url 'unconfirmed_orders' %}">Неподтвержденные заказы</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if page == 3 %}active{% endif %}" href="{% url 'accepted_orders' %}">Принятые заказы</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'confirmed_orders' %}active{% endif %}" href="{% url 'confirmed_orders' %}">Подтвержденные заказы</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if page == 4 %}active{% endif %}" href="{% url 'completed_orders' %}">Выполненные заказы</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'accepted_orders' %}active{% endif %}" href="{% url 'accepted_orders' %}">Принятые заказы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'completed_orders' %}active{% endif %}" href="{% url 'completed_orders' %}">Выполненные заказы</a>
         </li>
     </ul>
 </div>

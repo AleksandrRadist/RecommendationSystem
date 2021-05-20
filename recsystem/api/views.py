@@ -83,7 +83,16 @@ def api_orders(request):
 def api_orders_confirmed(request):
     if not request.user.is_authenticated:
         return Response(status=status.HTTP_403_FORBIDDEN)
-    orders = Order.objects.filter(confirmation_status=True)
+    orders = Order.objects.filter(confirmation_status=True, acceptance_status=False)
+    serializer = OrderSerializer(orders)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def api_orders_unconfirmed(request):
+    if not request.user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    orders = Order.objects.filter(confirmation_status=False)
     serializer = OrderSerializer(orders)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -92,7 +101,7 @@ def api_orders_confirmed(request):
 def api_orders_accepted(request):
     if not request.user.is_authenticated:
         return Response(status=status.HTTP_403_FORBIDDEN)
-    orders = Order.objects.filter(acceptance_status=True)
+    orders = Order.objects.filter(acceptance_status=True, completion_status=False)
     serializer = OrderSerializer(orders)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

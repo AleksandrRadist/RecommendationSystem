@@ -3,7 +3,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from .views import (api_orders, api_orders_detail, api_orders_confirm, api_orders_cancel,
                     api_orders_public, api_orders_public_detail, api_orders_complete,
                     api_orders_accept, api_orders_confirmed, api_orders_accepted,
-                    api_orders_completed)
+                    api_orders_completed, api_orders_unconfirmed)
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('orders/<int:order_id>/complete/', api_orders_complete, name='api_orders_complete'),
     path('orders/<int:order_id>/accept/', api_orders_accept, name='api_orders_accept'),
     path('orders/confirmed/', api_orders_confirmed, name='api_orders_confirmed'),
+    path('orders/unconfirmed/', api_orders_unconfirmed, name='api_orders_unconfirmed'),
     path('orders/accepted/', api_orders_accepted, name='api_orders_accepted'),
     path('orders/completed/', api_orders_completed, name='api_orders_completed'),
     path('orders/', api_orders, name='api_orders'),
