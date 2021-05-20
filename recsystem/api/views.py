@@ -157,7 +157,7 @@ def api_orders_accept(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if not order.confirmation_status:
         return Response(status=status.HTTP_409_CONFLICT)
-    if order.acceptance_status or order.completion_date:
+    if order.acceptance_status or order.completion_status:
         return Response(status=status.HTTP_208_ALREADY_REPORTED)
     order.acceptance_status = True
     order.completion_acceptance = datetime.datetime.now()

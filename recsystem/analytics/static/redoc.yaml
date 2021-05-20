@@ -819,11 +819,6 @@ paths:
           description: Объект не найден
 
 
-
-
-
-
-
 components:
   schemas:
     Token:

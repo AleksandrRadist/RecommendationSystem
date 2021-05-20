@@ -6,6 +6,7 @@ import pytz
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
+from django.contrib.auth.decorators import login_required
 from .forms import OrderForm
 from .models import Client, Category, Transaction, Subscription, Order
 
@@ -119,6 +120,54 @@ def order_confirm(request, order_id):
     return redirect('order', order_id=order_id)
 
 
+@login_required
+def order_accept(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if not order.confirmation_status:
+        return render(request, 'order.html', {
+            'order': order,
+            'message': 'Нельзя принять неподтвержденный заказ!'
+        })
+    if order.acceptance_status:
+        return render(request, 'order.html', {
+            'order': order,
+            'message': 'Заказ уже был принят!'
+        })
+    if order.completion_status:
+        return render(request, 'order.html', {
+            'order': order,
+            'message': 'Заказ уже был выполнен!'
+        })
+    order.acceptance_status = True
+    order.acceptance_date = datetime.datetime.now()
+    order.save()
+    return redirect('order', order_id=order_id)
+
+
+@login_required
+def order_complete(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if not order.confirmation_status:
+        return render(request, 'order.html', {
+            'order': order,
+            'message': 'Нельзя выполнить неподтвержденный заказ!'
+        })
+    if not order.acceptance_status:
+        return render(request, 'order.html', {
+            'order': order,
+            'message': 'Нельзя выполнить непринятый заказ!'
+        })
+    if order.completion_status:
+        return render(request, 'order.html', {
+            'order': order,
+            'message': 'Заказ уже был выполнен!'
+        })
+    order.completion_status = True
+    order.completion_date = datetime.datetime.now()
+    order.save()
+    return redirect('order', order_id=order_id)
+
+
 def order_cancel(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if order.acceptance_status:
@@ -151,3 +200,31 @@ def order_download(request):
     response = HttpResponse(ingredient_txt, content_type='text/plain')
     response['Content-Disposition'] = f'attachment; filename={file}'
     return response
+
+
+@login_required
+def confirmed_orders(request):
+    orders = Order.objects.filter(confirmation_status=True).order_by('-creation_date')
+    return render(request, 'confirmed_orders.html',
+                  {'orders': orders})
+
+
+@login_required
+def all_orders(request):
+    orders = Order.objects.order_by('-creation_date').all()
+    return render(request, 'orders.html',
+                  {'orders': orders})
+
+
+@login_required
+def accepted_orders(request):
+    orders = Order.objects.filter(acceptance_status=True).order_by('-acceptance_date')
+    return render(request, 'accepted_orders.html',
+                  {'orders': orders})
+
+
+@login_required
+def completed_orders(request):
+    orders = Order.objects.filter(completion_status=True).order_by('-completion_date')
+    return render(request, 'completed_orders.html',
+                  {'orders': orders})

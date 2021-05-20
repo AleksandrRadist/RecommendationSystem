@@ -80,7 +80,9 @@ TEMPLATES = [
         },
     },
 ]
-
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#   'django.core.context_processors.request',
+# )
 WSGI_APPLICATION = 'recsystem.wsgi.application'
 JWT_AUTH = {
     # how long the original token is valid for
@@ -139,3 +141,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = 'index'

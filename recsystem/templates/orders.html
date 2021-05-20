@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} Все заказы {% endblock %}
+{% block content %}
+    <div class="container">
+        {% include "menu.html" with page=1 %}
+        <h1> Все заказы </h1>
+        {% for order in orders %}
+            {% include "order_item.html" with order=order %}
+        {% endfor %}
+                {% if not orders %}
+        <div class="card mb-3 mt-1 shadow-sm">
+
+                <div class="card-body">
+                        <p class="card-text">
+                                Заказов нет
+                        </p>
+
+                </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

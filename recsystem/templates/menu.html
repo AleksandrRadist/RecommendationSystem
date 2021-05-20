@@ -1,0 +1,18 @@
+{% if request.user.is_authenticated %}
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if page == 1 %}active{% endif %}" href="{% url 'all_orders' %}">Все заказы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if page == 2 %}active{% endif %}" href="{% url 'confirmed_orders' %}">Подтвержденные заказы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if page == 3 %}active{% endif %}" href="{% url 'accepted_orders' %}">Принятые заказы</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if page == 4 %}active{% endif %}" href="{% url 'completed_orders' %}">Выполненные заказы</a>
+        </li>
+    </ul>
+</div>
+{% endif %}

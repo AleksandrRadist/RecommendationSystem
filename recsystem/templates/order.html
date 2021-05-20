@@ -2,7 +2,7 @@
 {% block title %}Заказ{% endblock %}
 {% block content %}
     <div class="row">
-            <div class="col-md-4 mb-3 mt-1">
+            <div class="col-md-5 mb-3 mt-1">
                     <div class="card">
                             <div class="card-body">
                                     <div class="h2">
@@ -11,6 +11,7 @@
                                     <div class="h3 text-muted">
                                          <a><strong class="d-block text-dark">Компания: {{ order.company_name }}</strong></a>
                                          <a><strong class="d-block text-dark">Категория: {{ order.category }}</strong></a>
+                                         <a><strong class="d-block text-dark">Email: {{ order.email }}</strong></a>
                                     </div>
                             </div>
                             <ul class="list-group list-group-flush">
@@ -30,40 +31,95 @@
                                     <li class="list-group-item">
                                             <div class="h6 text-primary">
                                                 Ожидаемая цена услуги:
-                                                {{ order.price }} ₽
+                                                {{ order.price }} ₽ <br/>
                                             </div>
                                     </li>
-                                    {% if order.confirmation_status == True %}
+                                    {% if request.user.is_authenticated %}
+                                            <li class="list-group-item">
+                                                    <div class="h6 text-primary">
+                                                        Дата создания заказа: {{ order.creation_date }} <br/>
+                                                        {% if order.acceptance_status %}
+                                                        Дата принятия заказа: {{ order.acceptance_date }}
+                                                        {% endif %}
+                                                        {% if order.completion_status %}
+                                                        Дата выполнения заказа: {{ order.completion_date }}
+                                                        {% endif %}
+                                                    </div>
+                                            </li>
                                             <li class="list-group-item">
                                                     {% if order.completion_status %}
                                                     <div class="h6 text-success">
-                                                        Ваш заказ выполнен!
+                                                        Заказ выполнен
                                                     </div>
                                                     {% elif order.acceptance_status %}
                                                     <div class="h6 text-success">
-                                                        Ваш заказ принят!
+                                                        Заказ принят и ожидает выполнения
+                                                    </div>
+                                                    {% elif order.confirmation_status %}
+                                                    <div class="h6 text-success">
+                                                        Заказ подтвержден и ожидает принятия
                                                     </div>
                                                     {% else %}
                                                     <div class="h6 text-warning">
-                                                        Ваш заказ ожидает рассмотрения.
+                                                        Заказ ожидает подтверждения
                                                     </div>
                                                     {% endif %}
                                             </li>
+                                    {% else %}
+                                            {% if order.confirmation_status == True %}
+                                                    <li class="list-group-item">
+                                                            {% if order.completion_status %}
+                                                            <div class="h6 text-success">
+                                                                Ваш заказ выполнен!
+                                                            </div>
+                                                            {% elif order.acceptance_status %}
+                                                            <div class="h6 text-success">
+                                                                Ваш заказ принят!
+                                                            </div>
+                                                            {% else %}
+                                                            <div class="h6 text-warning">
+                                                                Ваш заказ ожидает рассмотрения.
+                                                            </div>
+                                                            {% endif %}
+                                                    </li>
+                                            {% endif %}
                                     {% endif %}
                             </ul>
-                            {% if not order.acceptance_status %}
-                            {% if order.confirmation_status == False %}
-                            <a class="btn btn-lg btn-success"
-                                role="button" href="{% url 'order_confirm' order.id %}">
-                                Подтвердить заказ
-                            </a>
-                            {% else%}
-                            <a class="btn btn-lg btn-danger"
-                                role="button" href="{% url 'order_cancel' order.id %}">
-                                Отменить заказ
-                            </a>
-                            {% endif %}
-                            {% endif %}
+                            {% if request.user.is_authenticated %}
+                                {% if not order.acceptance_status %}
+                                    <a class="btn btn-lg btn-success"
+                                        role="button" href="{% url 'order_accept' order.id %}">
+                                        Принять заказ
+                                    </a>
+                                {% elif not order.completion_status %}
+                                    <a class="btn btn-lg btn-success"
+                                        role="button" href="{% url 'order_complete' order.id %}">
+                                        Выполнить заказ
+                                    </a>
+                                {% endif %}
+                                {% if message %}
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <strong>{{ message }}</strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                    {% if not order.acceptance_status %}
+                                            {% if order.confirmation_status == False %}
+                                                    <a class="btn btn-lg btn-success"
+                                                        role="button" href="{% url 'order_confirm' order.id %}">
+                                                        Подтвердить заказ
+                                                    </a>
+                                            {% else%}
+                                                    <a class="btn btn-lg btn-danger"
+                                                        role="button" href="{% url 'order_cancel' order.id %}">
+                                                        Отменить заказ
+                                                    </a>
+                                            {% endif %}
+                                    {% endif %}
+                            {% endif%}
                             <a class="btn btn-lg btn-primary"
                                 role="button" href="{% url 'order_download' %}">
                                 Скачать аналитику
@@ -71,7 +127,7 @@
                     </div>
             </div>
 
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="card mb-3 mt-1 shadow-sm">
                         <div class="card-body">
                                 <p class="card-text">
