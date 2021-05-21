@@ -1,15 +1,9 @@
 {% extends "base.html" %}
-{% block title %} Все сообщения {% endblock %}
+{% block title %} Прочитанные сообщения {% endblock %}
 {% block content %}
     <div class="container">
         {% include "menu_messages.html" %}
-        <h1> Сообщения </h1>
-        {% if page %}
-        <a class="btn btn-info btn-lg btn-block"
-            role="button" href="{% url 'messages_read_all' request.resolver_match.url_name %}">
-            Прочитать все
-        </a>
-        {% endif %}
+        <h1> Прочитанные сообщения </h1>
         {% for item in page %}
             {% include "message_item.html" with message=item %}
         {% endfor %}
@@ -18,7 +12,7 @@
 
                     <div class="card-body">
                             <p class="card-text">
-                                    Сообщений нету
+                                    Прочитанных сообщений нету
                             </p>
 
                     </div>

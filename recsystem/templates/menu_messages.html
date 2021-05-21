@@ -1,0 +1,15 @@
+{% if request.user.is_authenticated %}
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'all_messages' %}active{% endif %}" href="{% url 'all_messages' %}">Все сообщения</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'new_messages' %}active{% endif %}" href="{% url 'new_messages' %}">Новые сообщения</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'read_messages' %}active{% endif %}" href="{% url 'read_messages' %}">Прочитанные сообщения</a>
+        </li>
+    </ul>
+</div>
+{% endif %}

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import OrderForm, MessageForm
 from .models import Client, Category, Transaction, Subscription, Order, Message
 from recsystem.settings import paginator_items_on_page
+from django.urls import resolve
 
 def load(request):
     with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
@@ -277,7 +278,8 @@ def contacts(request):
     return render(request, 'contacts.html', {'form': form})
 
 
-def messages_page(request):
+@login_required
+def all_messages(request):
     messages = Message.objects.order_by('-creation_date')
     paginator = Paginator(messages, paginator_items_on_page)
     page_number = request.GET.get(
@@ -288,15 +290,41 @@ def messages_page(request):
                   {'page': page})
 
 
-def messages_read(request, message_id):
+@login_required
+def new_messages(request):
+    messages = Message.objects.filter(read_status=False).order_by('-creation_date')
+    paginator = Paginator(messages, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
+    return render(request, 'new_messages.html',
+                  {'page': page})
+
+
+@login_required
+def read_messages(request):
+    messages = Message.objects.filter(read_status=True).order_by('-creation_date')
+    paginator = Paginator(messages, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
+    return render(request, 'read_messages.html',
+                  {'page': page})
+
+
+@login_required
+def messages_read(request, message_id, prev_url):
     message = get_object_or_404(Message, id=message_id)
     message.read_status = True
     message.save()
-    return redirect('messages')
+    return redirect(prev_url)
 
 
-def messages_read_all(request):
+@login_required
+def messages_read_all(request, prev_url):
     messages = Message.objects.all()
     messages.update(read_status=True)
-    return redirect('messages')
+    return redirect(prev_url)
 

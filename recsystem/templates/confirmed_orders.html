@@ -2,7 +2,7 @@
 {% block title %} Подтвержденные заказы {% endblock %}
 {% block content %}
     <div class="container">
-        {% include "menu.html" %}
+        {% include "menu_orders.html" %}
         <h1> Подтвержденные заказы </h1>
         {% for order in page %}
             {% include "order_item.html" with order=order %}

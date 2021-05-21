@@ -3,7 +3,7 @@
                 <p class="card-text">
                     {% if not message.read_status %}
                         <div class="alert alert-info" role="alert">
-                          <a href="{% url 'messages_read' message.id %}" class="alert-link">Новое сообщение!</a>
+                          <a href="{% url 'messages_read' message.id request.resolver_match.url_name %}" class="alert-link">Новое сообщение!</a>
                         </div>
                     {% endif %}
                     <a>
