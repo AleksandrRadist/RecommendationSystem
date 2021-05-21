@@ -20,7 +20,7 @@ urlpatterns = [
     path('order/<int:order_id>/cancel/', views.order_cancel, name='order_cancel'),
     path('contacts/', views.contacts, name='contacts'),
     path('messages/', views.messages_page, name='messages'),
-    path('messages/read/<int:message_id>/', views.messages_read, name='messages_read'),
+    path('messages/<int:message_id>/read/', views.messages_read, name='messages_read'),
     path('messages/read/all/', views.messages_read_all, name='messages_read_all'),
     path('', views.index, name='index'),
 ]

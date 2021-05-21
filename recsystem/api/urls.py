@@ -24,7 +24,7 @@ urlpatterns = [
     path('orders/completed/', api_orders_completed, name='api_orders_completed'),
     path('orders/', api_orders, name='api_orders'),
     path('orders/<str:code>/', api_orders_detail, name='api_orders_detail'),
-    path('messages/read/<int:message_id>/', api_messages_read, name='api_messages_read'),
+    path('messages/<int:message_id>/read/', api_messages_read, name='api_messages_read'),
     path('messages/read/all/', api_messages_read_all, name='api_messages_read_all'),
     path('messages/', api_messages, name='api_messages'),
 ]

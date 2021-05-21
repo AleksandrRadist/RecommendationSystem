@@ -6,7 +6,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .serializers import (OrderSerializer, OrderPublicSerializer, OrderWriteSerializer, MessageSerializer)
+from .serializers import (OrderSerializer, OrderPublicSerializer, OrderWriteSerializer, MessageSerializer,
+                          MessagePublicSerializer, MessageWriteSerializer)
 
 
 @api_view(['GET'])
@@ -178,10 +179,10 @@ def api_orders_accept(request, order_id):
 @api_view(['POST', "GET"])
 def api_messages(request):
     if request.method == 'POST':
-        serializer = MessageSerializer(data=request.data)
+        serializer = MessageWriteSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            message = serializer.save()
+            return Response(MessagePublicSerializer(message).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     if not request.user.is_authenticated:
         return Response(status=status.HTTP_403_FORBIDDEN)

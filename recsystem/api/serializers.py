@@ -31,10 +31,22 @@ class OrderPublicSerializer(serializers.ModelSerializer):
         model = Order
 
 
-class MessageSerializer(serializers.ModelSerializer):
-    creation_date = serializers.DateTimeField(read_only=True)
-    read_status = serializers.BooleanField(read_only=True)
+class MessageWriteSerializer(serializers.ModelSerializer):
+    text = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
 
     class Meta:
-        fields = ('text', 'creation_date', 'read_status', 'email')
+        fields = ('text', 'email')
+        model = Message
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
+        model = Message
+
+
+class MessagePublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('text', 'email')
         model = Message
