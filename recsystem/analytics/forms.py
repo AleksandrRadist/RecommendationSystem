@@ -1,5 +1,5 @@
 from django import forms
-from .models import Order
+from .models import Order, Message
 from tempus_dominus.widgets import DatePicker
 
 
@@ -15,3 +15,9 @@ class OrderForm(forms.ModelForm):
             'date_start': DatePicker(),
             'date_end': DatePicker()
         }
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ('text', 'email',)

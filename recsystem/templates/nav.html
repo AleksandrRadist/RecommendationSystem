@@ -9,8 +9,10 @@
         {% if request.user.is_authenticated %}
         <a class="p-2 text-dark" href="{% url 'all_orders' %}">Заказы</a>
         <a class="p-2 text-dark" href="/admin/">Данные</a>
+        <a class="p-2 text-dark" href="{% url 'messages' %}">Сообщения</a>
         <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
         {% else %}
+        <a class="p-2 text-dark" href="{% url 'contacts' %}">Контакты</a>
         <a class="p-2 text-dark" href="{% url 'login' %}">Управление</a>
         {% endif %}
 

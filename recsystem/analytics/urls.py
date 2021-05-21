@@ -1,5 +1,5 @@
 from django.urls import path
-from django.contrib.auth.views  import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 
 urlpatterns = [
@@ -18,5 +18,9 @@ urlpatterns = [
     path('order/<int:order_id>/accept/', views.order_accept, name='order_accept'),
     path('order/<int:order_id>/complete/', views.order_complete, name='order_complete'),
     path('order/<int:order_id>/cancel/', views.order_cancel, name='order_cancel'),
+    path('contacts/', views.contacts, name='contacts'),
+    path('messages/', views.messages_page, name='messages'),
+    path('messages/read/<int:message_id>/', views.messages_read, name='messages_read'),
+    path('messages/read/all/', views.messages_read_all, name='messages_read_all'),
     path('', views.index, name='index'),
 ]

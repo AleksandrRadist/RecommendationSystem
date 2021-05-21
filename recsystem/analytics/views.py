@@ -7,8 +7,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .forms import OrderForm
-from .models import Client, Category, Transaction, Subscription, Order
+from .forms import OrderForm, MessageForm
+from .models import Client, Category, Transaction, Subscription, Order, Message
 from recsystem.settings import paginator_items_on_page
 
 def load(request):
@@ -260,3 +260,43 @@ def unconfirmed_orders(request):
         page_number)
     return render(request, 'unconfirmed_orders.html',
                   {'page': page})
+
+
+def contacts(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST or None)
+
+        if form.is_valid():
+            form.save()
+            form = MessageForm()
+            return render(request, 'contacts.html', {'form': form, 'flag': True})
+
+        return render(request, 'contacts.html', {'form': form})
+
+    form = MessageForm()
+    return render(request, 'contacts.html', {'form': form})
+
+
+def messages_page(request):
+    messages = Message.objects.order_by('-creation_date')
+    paginator = Paginator(messages, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
+    return render(request, 'messages.html',
+                  {'page': page})
+
+
+def messages_read(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    message.read_status = True
+    message.save()
+    return redirect('messages')
+
+
+def messages_read_all(request):
+    messages = Message.objects.all()
+    messages.update(read_status=True)
+    return redirect('messages')
+

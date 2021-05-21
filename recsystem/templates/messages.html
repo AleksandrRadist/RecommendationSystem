@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} Категории {% endblock %}
+{% block content %}
+    <div class="container">
+        <h1> Сообщения </h1>
+        <a class="btn btn-info btn-lg btn-block"
+            role="button" href="{% url 'messages_read_all' %}">
+            Прочитать все
+        </a>
+        {% for item in page %}
+            {% include "message_item.html" with message=item %}
+        {% endfor %}
+    </div>
+        {% if page.has_other_pages %}
+            {% include "paginator.html" with items=page %}
+        {% endif %}
+{% endblock %}

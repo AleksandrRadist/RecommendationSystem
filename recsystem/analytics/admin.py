@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, Category, Transaction, Subscription, Order
+from .models import Client, Category, Transaction, Subscription, Order, Message
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -37,8 +37,15 @@ class OrderAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'email',)
+    readonly_fields = ('creation_date',)
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Message, MessageAdmin)

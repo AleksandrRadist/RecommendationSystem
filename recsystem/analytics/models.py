@@ -96,3 +96,10 @@ class Order(models.Model):
     completion_date = models.DateTimeField(null=True, blank=True)
     acceptance_status = models.BooleanField(default=False)
     acceptance_date = models.DateTimeField(null=True, blank=True)
+
+
+class Message(models.Model):
+    text = models.TextField()
+    email = models.EmailField()
+    read_status = models.BooleanField(default=False)
+    creation_date = models.DateTimeField(auto_now_add=True)

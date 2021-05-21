@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %} Категории {% endblock %}
+{% block content %}
+    <div class="container">
+        <h1> Контакты </h1>
+{% load analytics_filters %}
+        <div class="card my-4">
+                <form
+                        action="{% url 'contacts' %}"
+                        method="post">
+                        {% csrf_token %}
+                        <h5 class="card-header">Связаться с нами</h5>
+                        <div class="card-body">
+                                <form>
+                                        <a><strong class="d-block text-gray-dark">Ваша электронная почта</strong></a>
+                                        <div class="form-group">
+                                                {{ form.email|addclass:"form-control" }}
+                                        </div>
+                                        <a><strong class="d-block text-gray-dark">Каков ваш вопрос?</strong></a>
+                                        <div class="form-group">
+                                                {{ form.text|addclass:"form-control" }}
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Отправить</button>
+                                </form>
+                        </div>
+                </form>
+            {% if flag %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Ваше сообщение было отправлено!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

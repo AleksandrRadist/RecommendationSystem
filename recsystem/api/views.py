@@ -1,12 +1,12 @@
 import uuid
 import datetime
-from analytics.models import Order, Category, Transaction
+from analytics.models import Order, Category, Transaction, Message
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .serializers import (OrderSerializer, OrderPublicSerializer, OrderWriteSerializer)
+from .serializers import (OrderSerializer, OrderPublicSerializer, OrderWriteSerializer, MessageSerializer)
 
 
 @api_view(['GET'])
@@ -174,3 +174,38 @@ def api_orders_accept(request, order_id):
     serializer = OrderSerializer(order)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+@api_view(['POST', "GET"])
+def api_messages(request):
+    if request.method == 'POST':
+        serializer = MessageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if not request.user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    messages = Message.objects.all()
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def api_messages_read(request, message_id):
+    if not request.user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    message = get_object_or_404(Message, id=message_id)
+    message.read_status = True
+    message.save()
+    serializer = MessageSerializer(message)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def api_messages_read_all(request):
+    if not request.user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    messages = Message.objects.all()
+    messages.update(read_status=True)
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

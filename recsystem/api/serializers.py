@@ -1,4 +1,4 @@
-from analytics.models import Order
+from analytics.models import Order, Message
 from rest_framework import serializers
 from rest_framework.fields import empty
 from rest_framework.settings import api_settings
@@ -29,3 +29,12 @@ class OrderPublicSerializer(serializers.ModelSerializer):
             'email', 'completion_status', 'acceptance_status',
         )
         model = Order
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    creation_date = serializers.DateTimeField(read_only=True)
+    read_status = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        fields = ('text', 'creation_date', 'read_status', 'email')
+        model = Message

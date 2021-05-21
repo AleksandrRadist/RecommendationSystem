@@ -1,0 +1,17 @@
+<div class="card mb-3 mt-1 shadow-sm">
+        <div class="card-body">
+                <p class="card-text">
+                    {% if not message.read_status %}
+                        <div class="alert alert-info" role="alert">
+                          <a href="{% url 'messages_read' message.id %}" class="alert-link">Новое сообщение!</a>
+                        </div>
+                    {% endif %}
+                    <a>
+                        <strong class="d-block text-gray-dark">{{ message.email }}</strong>
+                    </a>
+                    <a>
+                        <strong class="d-block text-gray-dark"></strong>{{ message.text|linebreaksbr }}
+                    </a>
+                </p>
+        </div>
+</div>

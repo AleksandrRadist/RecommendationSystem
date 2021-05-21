@@ -11,7 +11,7 @@ admin.site.enable_nav_sidebar = False
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    path('/documentation/api/', TemplateView.as_view(template_name='redoc.html'), name='api'),
+    path('documentation/api/', TemplateView.as_view(template_name='redoc.html'), name='api'),
     path('', include('analytics.urls')),
 ]
 if settings.DEBUG:
