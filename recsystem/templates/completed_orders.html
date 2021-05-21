@@ -4,10 +4,10 @@
     <div class="container">
         {% include "menu.html" %}
         <h1> Выполненные заказы </h1>
-        {% for order in orders %}
+        {% for order in page %}
             {% include "order_item.html" with order=order %}
         {% endfor %}
-        {% if not orders %}
+        {% if not page %}
         <div class="card mb-3 mt-1 shadow-sm">
 
                 <div class="card-body">
@@ -19,4 +19,7 @@
         </div>
         {% endif %}
     </div>
+        {% if page.has_other_pages %}
+            {% include "paginator.html" with items=page %}
+        {% endif %}
 {% endblock %}

@@ -3,8 +3,11 @@
 {% block content %}
     <div class="container">
         <h1> Категории </h1>
-        {% for item in items %}
+        {% for item in page %}
             {% include "item.html" with category=item %}
         {% endfor %}
     </div>
+        {% if page.has_other_pages %}
+            {% include "paginator.html" with items=page %}
+        {% endif %}
 {% endblock %}

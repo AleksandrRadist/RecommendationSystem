@@ -5,11 +5,11 @@ from django.shortcuts import get_object_or_404
 import pytz
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .forms import OrderForm
 from .models import Client, Category, Transaction, Subscription, Order
-
+from recsystem.settings import paginator_items_on_page
 
 def load(request):
     with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
@@ -190,8 +190,13 @@ def index(request):
 
 def categories(request):
     items = Category.objects.all()
+    paginator = Paginator(items, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
     return render(request, 'category_list.html',
-                  {'items': items})
+                  {'page': page})
 
 
 def order_download(request):
@@ -212,26 +217,46 @@ def confirmed_orders(request):
 @login_required
 def all_orders(request):
     orders = Order.objects.order_by('-creation_date').all()
+    paginator = Paginator(orders, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
     return render(request, 'orders.html',
-                  {'orders': orders})
+                  {'page': page})
 
 
 @login_required
 def accepted_orders(request):
     orders = Order.objects.filter(acceptance_status=True, completion_status=False).order_by('-acceptance_date')
+    paginator = Paginator(orders, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
     return render(request, 'accepted_orders.html',
-                  {'orders': orders})
+                  {'page': page})
 
 
 @login_required
 def completed_orders(request):
     orders = Order.objects.filter(completion_status=True).order_by('-completion_date')
+    paginator = Paginator(orders, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
     return render(request, 'completed_orders.html',
-                  {'orders': orders})
+                  {'page': page})
 
 
 @login_required
 def unconfirmed_orders(request):
     orders = Order.objects.filter(confirmation_status=False).order_by('-creation_date')
+    paginator = Paginator(orders, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
     return render(request, 'unconfirmed_orders.html',
-                  {'orders': orders})
+                  {'page': page})
