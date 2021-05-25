@@ -1,16 +1,17 @@
 import csv
 import datetime
 import uuid
-from django.shortcuts import get_object_or_404
+
 import pytz
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect, render
+from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
 from .models import Client, Category, Transaction, Subscription, Order, Message
-from recsystem.settings import paginator_items_on_page
-from django.urls import resolve
+
 
 def load(request):
     with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
@@ -327,4 +328,9 @@ def messages_read_all(request, prev_url):
     messages = Message.objects.all()
     messages.update(read_status=True)
     return redirect(prev_url)
+
+
+
+
+
 

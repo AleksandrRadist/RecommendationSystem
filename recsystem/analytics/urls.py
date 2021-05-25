@@ -1,11 +1,14 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
+from . import poll_views
 
 urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
     path('order/<int:order_id>/', views.order_page, name='order'),
+    path('order/data/gender/<int:order_id>/', poll_views.order_data_gender, name='order_data_gender'),
+    path('order/data/age/<int:order_id>/', poll_views.order_data_age, name='order_data_age'),
     path('order/new/', views.order_new, name='order_new'),
     path('categories/', views.categories, name='categories'),
     path('orders/confirmed/', views.confirmed_orders, name='confirmed_orders'),

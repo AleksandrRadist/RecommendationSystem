@@ -2,6 +2,7 @@ asgiref==3.3.4
 cycler==0.10.0
 demjson==2.2.4
 Django==3.2.3
+django-cors-headers==3.7.0
 django-environ==0.4.5
 django-tempus-dominus==5.1.2.13
 djangorestframework==3.12.4

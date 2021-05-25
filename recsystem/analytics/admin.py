@@ -6,34 +6,34 @@ from .models import Client, Category, Transaction, Subscription, Order, Message
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('id', 'fullname', 'email', 'phone_number',)
     search_fields = ('fullname',)
-    list_filter = ('fullname',)
+    list_filter = ('gender',)
     empty_value_display = '-пусто-'
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name',)
     search_fields = ('name',)
-    list_filter = ('name',)
     empty_value_display = '-пусто-'
 
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('id', 'client_id', 'product_category', 'product_company', 'amount', 'date',)
-    search_fields = ('id',)
-    list_filter = ('date',)
+    search_fields = ('product_company',)
+    list_filter = ('product_category',)
     empty_value_display = '-пусто-'
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ('id', 'client_id', 'product_category', 'product_company', 'amount', 'date_start', 'date_end',)
-    search_fields = ('id',)
-    list_filter = ('date_start',)
+    search_fields = ('product_company',)
+    list_filter = ('product_category',)
     empty_value_display = '-пусто-'
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'category',)
+    list_display = ('id', 'category', 'company_name')
     readonly_fields = ('creation_date',)
+    list_filter = ('category',)
     empty_value_display = '-пусто-'
 
 

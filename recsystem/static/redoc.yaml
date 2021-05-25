@@ -17,6 +17,8 @@ tags:
     description: Авторизация
   - name: ORDERS
     description: Заказы на рекламу
+  - name: MESSAGES
+    description: Сообщения
 
 paths:
   /auth/token/:
@@ -130,7 +132,7 @@ paths:
 
 
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
       security:
@@ -163,46 +165,44 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                    company_name:
-                      type: string
-                    email:
-                      type: string
-                    category:
-                      type: string
-                    code:
-                      type: string
-                    transactions_number:
-                      type: number
-                    clients_number:
-                      type: number
-                    clients:
-                      type: string
-                    date_start:
-                      type: string (YYYY--mm-dd)
-                    date_end:
-                      type: string (YYYY--mm-dd)
-                    days:
-                      type: number
-                    price:
-                      type: number
-                    confirmation_status:
-                      type: bool
-                    completion_status:
-                      type: bool
-                    creation_date:
-                      type: string
-                    completion_date:
-                      type: string
-                    acceptance_status:
-                      type: bool
-                    acceptance_date:
-                      type: string
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  email:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  confirmation_status:
+                    type: bool
+                  completion_status:
+                    type: bool
+                  creation_date:
+                    type: string
+                  completion_date:
+                    type: string
+                  acceptance_status:
+                    type: bool
+                  acceptance_date:
+                    type: string
         400:
           description: Ошибка
           content:
@@ -210,7 +210,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ValidationError'
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
       security:
@@ -270,7 +270,7 @@ paths:
                     acceptance_date:
                       type: string
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
       security:
@@ -331,7 +331,7 @@ paths:
                     acceptance_date:
                       type: string
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
       security:
@@ -392,7 +392,7 @@ paths:
                     acceptance_date:
                       type: string
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
       security:
@@ -453,7 +453,7 @@ paths:
                     acceptance_date:
                       type: string
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
       security:
@@ -482,50 +482,48 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                    company_name:
-                      type: string
-                    email:
-                      type: string
-                    category:
-                      type: string
-                    code:
-                      type: string
-                    transactions_number:
-                      type: number
-                    clients_number:
-                      type: number
-                    clients:
-                      type: string
-                    date_start:
-                      type: string (YYYY--mm-dd)
-                    date_end:
-                      type: string (YYYY--mm-dd)
-                    days:
-                      type: number
-                    price:
-                      type: number
-                    confirmation_status:
-                      type: bool
-                    completion_status:
-                      type: bool
-                    creation_date:
-                      type: string
-                    completion_date:
-                      type: string
-                    acceptance_status:
-                      type: bool
-                    acceptance_date:
-                      type: string
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  email:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  confirmation_status:
+                    type: bool
+                  completion_status:
+                    type: bool
+                  creation_date:
+                    type: string
+                  completion_date:
+                    type: string
+                  acceptance_status:
+                    type: bool
+                  acceptance_date:
+                    type: string
         404:
           description: Объект не найден
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
 
@@ -551,52 +549,50 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                    company_name:
-                      type: string
-                    email:
-                      type: string
-                    category:
-                      type: string
-                    code:
-                      type: string
-                    transactions_number:
-                      type: number
-                    clients_number:
-                      type: number
-                    clients:
-                      type: string
-                    date_start:
-                      type: string (YYYY--mm-dd)
-                    date_end:
-                      type: string (YYYY--mm-dd)
-                    days:
-                      type: number
-                    price:
-                      type: number
-                    confirmation_status:
-                      type: bool
-                    completion_status:
-                      type: bool
-                    creation_date:
-                      type: string
-                    completion_date:
-                      type: string
-                    acceptance_status:
-                      type: bool
-                    acceptance_date:
-                      type: string
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  email:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  confirmation_status:
+                    type: bool
+                  completion_status:
+                    type: bool
+                  creation_date:
+                    type: string
+                  completion_date:
+                    type: string
+                  acceptance_status:
+                    type: bool
+                  acceptance_date:
+                    type: string
         208:
           description: Заказ уже выполнен
         404:
           description: Объект не найден
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
         409:
@@ -624,52 +620,50 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                    company_name:
-                      type: string
-                    email:
-                      type: string
-                    category:
-                      type: string
-                    code:
-                      type: string
-                    transactions_number:
-                      type: number
-                    clients_number:
-                      type: number
-                    clients:
-                      type: string
-                    date_start:
-                      type: string (YYYY--mm-dd)
-                    date_end:
-                      type: string (YYYY--mm-dd)
-                    days:
-                      type: number
-                    price:
-                      type: number
-                    confirmation_status:
-                      type: bool
-                    completion_status:
-                      type: bool
-                    creation_date:
-                      type: string
-                    completion_date:
-                      type: string
-                    acceptance_status:
-                      type: bool
-                    acceptance_date:
-                      type: string
+                type: object
+                properties:
+                  id:
+                    type: number
+                  company_name:
+                    type: string
+                  email:
+                    type: string
+                  category:
+                    type: string
+                  code:
+                    type: string
+                  transactions_number:
+                    type: number
+                  clients_number:
+                    type: number
+                  clients:
+                    type: string
+                  date_start:
+                    type: string (YYYY--mm-dd)
+                  date_end:
+                    type: string (YYYY--mm-dd)
+                  days:
+                    type: number
+                  price:
+                    type: number
+                  confirmation_status:
+                    type: bool
+                  completion_status:
+                    type: bool
+                  creation_date:
+                    type: string
+                  completion_date:
+                    type: string
+                  acceptance_status:
+                    type: bool
+                  acceptance_date:
+                    type: string
         208:
           description: Заказ уже принят или выполнен
         404:
           description: Объект не найден
         401:
-          description: Необходим JWT токен
+          description: Токен не валиден
         403:
           description: Нет прав доступа
         409:
@@ -878,6 +872,217 @@ paths:
                     type: bool
         404:
           description: Объект не найден
+
+  /messages/:
+    get:
+      tags:
+        - MESSAGES
+      description: |
+        Список всех сообщений
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    email:
+                      type: string
+                    creation_date:
+                      type: string
+                    read_status:
+                      type: bool
+                    text:
+                      type: string
+        401:
+          description: Токен не валиден
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
+    post:
+      tags:
+        - MESSAGES
+      description: |
+        Создать сообщение
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  text:
+                    type: string
+
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  text:
+                    type: string
+        400:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /messages/new/:
+    get:
+      tags:
+        - MESSAGES
+      description: |
+        Список новых сообщений
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    email:
+                      type: string
+                    creation_date:
+                      type: string
+                    read_status:
+                      type: bool
+                    text:
+                      type: string
+        401:
+          description: Токен не валиден
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
+
+  /messages/read/:
+    get:
+      tags:
+        - MESSAGES
+      description: |
+        Список прочитанных сообщений
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    email:
+                      type: string
+                    creation_date:
+                      type: string
+                    read_status:
+                      type: bool
+                    text:
+                      type: string
+        401:
+          description: Токен не валиден
+        403:
+          description: Нет прав доступа
+      security:
+      - jwt_auth:
+        - read:admin
+
+  /messages/{message_id}/read/:
+    parameters:
+      - name: message_id
+        in: path
+        required: true
+        description: Id сообщения
+        schema:
+          type: number
+    post:
+      tags:
+        - MESSAGES
+      description: |
+        Отметить сообщение как прочитанное
+      security:
+      - jwt_auth:
+        - write:admin
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  email:
+                    type: string
+                  creation_date:
+                    type: string
+                  read_status:
+                    type: bool
+                  text:
+                    type: string
+        401:
+          description: Токен не валиден
+        404:
+          description: Объект не найден
+        403:
+          description: Нет прав доступа
+
+  /messages/read/all/:
+    post:
+      tags:
+        - MESSAGES
+      description: |
+        Отметить все сообщения как прочитанные
+      security:
+      - jwt_auth:
+        - write:admin
+      responses:
+        200:
+          description: Список объектов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    email:
+                      type: string
+                    creation_date:
+                      type: string
+                    read_status:
+                      type: bool
+                    text:
+                      type: string
+        401:
+          description: Токен не валиден
+        403:
+          description: Нет прав доступа
 
 
 components:
