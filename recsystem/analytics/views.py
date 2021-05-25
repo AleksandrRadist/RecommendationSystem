@@ -186,7 +186,14 @@ def index(request):
             return redirect('order', order.id)
         except Order.DoesNotExist:
             return render(request, 'index.html', {'flag': 1})
-    return render(request, 'index.html')
+    demo = request.GET.get('demo', None)
+    if demo is None:
+        return render(request, 'index.html')
+    return render(request, 'index.html', {'demo': True})
+
+
+def demo_notification(request):
+    return redirect('/?demo=True')
 
 
 def categories(request):
@@ -211,8 +218,13 @@ def order_download(request):
 @login_required
 def confirmed_orders(request):
     orders = Order.objects.filter(confirmation_status=True, acceptance_status=False).order_by('-creation_date')
+    paginator = Paginator(orders, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
     return render(request, 'confirmed_orders.html',
-                  {'orders': orders})
+                  {'page': page})
 
 
 @login_required

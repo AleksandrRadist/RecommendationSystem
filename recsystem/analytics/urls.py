@@ -6,6 +6,7 @@ from . import poll_views
 urlpatterns = [
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
+    path('demo/',  views.demo_notification, name='demo'),
     path('order/<int:order_id>/', views.order_page, name='order'),
     path('order/data/gender/<int:order_id>/', poll_views.order_data_gender, name='order_data_gender'),
     path('order/data/age/<int:order_id>/', poll_views.order_data_age, name='order_data_age'),

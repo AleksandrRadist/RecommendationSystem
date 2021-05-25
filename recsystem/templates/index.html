@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Главная{% endblock %}
 {% block content %}
+{% if demo %}
+    {% include "demo_notification.html" %}
+{% endif %}
     <div class="row">
         <div class="col-md-12 mb-3 mt-3">
             <div class="card">
@@ -10,8 +13,6 @@
                         </div>
                 </div>
                 <ul class="list-group list-group-flush">
-
-
                     <li class="list-group-item">
                         <form method="post" action="" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -46,6 +47,16 @@
                         </div>
                         <div class="h6 text-dark">
                            Под руководством Косарева Ильи Максимовича
+                        </div>
+                    </li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="h6 text-dark">
+                           <a class="btn btn-md btn-primary"
+                                role="button" href="{% url 'demo' %}">
+                                Показ демо рекламы
+                            </a>
                         </div>
                     </li>
                 </ul>
