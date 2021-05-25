@@ -46,11 +46,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'corsheaders',
 ]
 SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -93,14 +95,14 @@ JWT_AUTH = {
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 if DEBUG:
- DATABASES = {
+    DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.sqlite3',
          'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
      }
  }
 else:
- DATABASES = {
+    DATABASES = {
      'default': env.db()
  }
 
@@ -122,7 +124,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 

@@ -4,7 +4,7 @@ from .views import (api_orders, api_orders_detail, api_orders_confirm, api_order
                     api_orders_public, api_orders_public_detail, api_orders_complete,
                     api_orders_accept, api_orders_confirmed, api_orders_accepted,
                     api_orders_completed, api_orders_unconfirmed, api_messages_read,
-                    api_messages_read_all, api_messages)
+                    api_messages_read_all, api_messages, api_messages_new, api_messages_red)
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 urlpatterns = [
@@ -26,5 +26,7 @@ urlpatterns = [
     path('orders/<str:code>/', api_orders_detail, name='api_orders_detail'),
     path('messages/<int:message_id>/read/', api_messages_read, name='api_messages_read'),
     path('messages/read/all/', api_messages_read_all, name='api_messages_read_all'),
+    path('messages/new/', api_messages_new, name='api_messages_new'),
+    path('messages/read/', api_messages_red, name='api_messages_red'),
     path('messages/', api_messages, name='api_messages'),
 ]

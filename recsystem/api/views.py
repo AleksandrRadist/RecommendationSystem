@@ -210,3 +210,21 @@ def api_messages_read_all(request):
     messages.update(read_status=True)
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def api_messages_new(request):
+    if not request.user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    messages = Message.objects.filter(read_status=False)
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def api_messages_red(request):
+    if not request.user.is_authenticated:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    messages = Message.objects.filter(read_status=True)
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data)
