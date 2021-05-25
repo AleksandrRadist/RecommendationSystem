@@ -103,8 +103,6 @@ paths:
                       type: string
                     code:
                       type: string
-                    transactions_number:
-                      type: number
                     clients_number:
                       type: number
                     clients:
@@ -177,8 +175,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   clients:
@@ -243,8 +239,6 @@ paths:
                       type: string
                     code:
                       type: string
-                    transactions_number:
-                      type: number
                     clients_number:
                       type: number
                     clients:
@@ -304,8 +298,6 @@ paths:
                       type: string
                     code:
                       type: string
-                    transactions_number:
-                      type: number
                     clients_number:
                       type: number
                     clients:
@@ -365,8 +357,6 @@ paths:
                       type: string
                     code:
                       type: string
-                    transactions_number:
-                      type: number
                     clients_number:
                       type: number
                     clients:
@@ -426,8 +416,6 @@ paths:
                       type: string
                     code:
                       type: string
-                    transactions_number:
-                      type: number
                     clients_number:
                       type: number
                     clients:
@@ -494,8 +482,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   clients:
@@ -561,8 +547,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   clients:
@@ -632,8 +616,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   clients:
@@ -698,8 +680,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   date_start:
@@ -746,8 +726,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   date_start:
@@ -771,7 +749,7 @@ paths:
       tags:
         - ORDERS
       description: |
-        Создать заказ
+        Создать заказ для клиентов
       requestBody:
         content:
           application/json:
@@ -802,8 +780,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   date_start:
@@ -854,8 +830,6 @@ paths:
                     type: string
                   code:
                     type: string
-                  transactions_number:
-                    type: number
                   clients_number:
                     type: number
                   date_start:

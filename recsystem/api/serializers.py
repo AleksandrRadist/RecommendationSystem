@@ -25,7 +25,7 @@ class OrderPublicSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'company_name', 'category', 'date_start', 'date_end', 'clients_number',
-            'transactions_number', 'price', 'days', 'confirmation_status', 'code',
+            'price', 'days', 'confirmation_status', 'code',
             'email', 'completion_status', 'acceptance_status',
         )
         model = Order

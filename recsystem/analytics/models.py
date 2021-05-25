@@ -83,7 +83,6 @@ class Order(models.Model):
     email = models.EmailField()
     company_name = models.CharField(max_length=100, default='')
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=50)
-    transactions_number = models.IntegerField(default=0)
     clients_number = models.IntegerField(default=0)
     clients = models.JSONField(null=True, blank=True)
     date_start = models.DateField(default=datetime.date.today)

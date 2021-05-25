@@ -89,7 +89,6 @@ def order_new(request):
             order = form.save(commit=False)
             category = Category.objects.get(name=order.category)
             transactions = Transaction.objects.filter(product_category=category.id)
-            order.transactions_number = transactions.count()
             clients = []
             for i in transactions.values('client_id').distinct():
                 clients.append(i['client_id'])

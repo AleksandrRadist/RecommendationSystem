@@ -55,7 +55,6 @@ def api_orders(request):
         if serializer.is_valid():
             category = Category.objects.get(name=serializer.validated_data['category'])
             transactions = Transaction.objects.filter(product_category=category.id)
-            transactions_number = transactions.count()
             clients = []
             for i in transactions.values('client_id').distinct():
                 clients.append(i['client_id'])
@@ -65,8 +64,7 @@ def api_orders(request):
             days = delta.days + 1
             price = (days // 7 + 1) * 20 * clients_number
             code = uuid.uuid4().hex[:10].upper()
-            serializer.save(transactions_number=transactions_number,
-                            clients=clients,
+            serializer.save(clients=clients,
                             clients_number=clients_number,
                             price=price,
                             days=days,
