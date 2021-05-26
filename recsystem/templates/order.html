@@ -81,6 +81,9 @@
                                                             <div class="h6 text-warning">
                                                                 Ваш заказ ожидает рассмотрения.
                                                             </div>
+                                                            <div class="h6 text-warning">
+                                                                Мы свяжемся с Вами в ближайшее время.
+                                                            </div>
                                                             {% endif %}
                                                     </li>
                                             {% endif %}
@@ -124,8 +127,8 @@
                                     {% endif %}
                             {% endif%}
                             <a class="btn btn-lg btn-primary"
-                                role="button" href="{% url 'order_download' %}">
-                                Скачать данные
+                                role="button" href="{% url 'order_download' order.id %}">
+                                Скачать данные о заказе
                             </a>
                     </div>
             </div>
@@ -160,7 +163,6 @@
             method:'GET',
             url:dataURL,
             success:function(response){
-                console.log('RESPONSE:', response)
                 for (var i in response){
 
                     var key = Object.keys(response[i])[0]
@@ -169,8 +171,6 @@
                     state.gitems.push(key)
                     state.gvalues.push(value)
                 }
-
-                console.log('STATE:', state)
                 buildChart()
 
             }
@@ -180,7 +180,6 @@
             method:'GET',
             url:dataURL,
             success:function(response){
-                console.log('RESPONSE:', response)
                 for (var i in response){
 
                     var key = Object.keys(response[i])[0]
@@ -189,8 +188,6 @@
                     state.aitems.push(key)
                     state.avalues.push(value)
                 }
-
-                console.log('STATE:', state)
                 buildChart()
 
             }

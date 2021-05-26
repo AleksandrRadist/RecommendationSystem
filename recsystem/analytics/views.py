@@ -1,8 +1,8 @@
 import csv
 import datetime
 import uuid
-
 import pytz
+import json
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
 from .models import Client, Category, Transaction, Subscription, Order, Message
-
+from .utils import get_clients_data_gender, get_clients_data_age
 
 def load(request):
     with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
@@ -207,10 +207,33 @@ def categories(request):
                   {'page': page})
 
 
-def order_download(request):
-    ingredient_txt = ['u are trash']
-    file = 'stats.txt'
-    response = HttpResponse(ingredient_txt, content_type='text/plain')
+def order_download(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    data = [
+        ('Код заказа', order.code),
+        ('Компания', order.company_name),
+        ('Email', order.email),
+        ('Количество клиентов', order.clients_number),
+        ('Дата начала', order.date_start),
+        ('Дата окончания', order.date_end),
+        ('Всего дней', order.days),
+        ('Ожидаемая цена услуги', order.price)
+    ]
+    gender_data = get_clients_data_gender(order)
+    age_data = get_clients_data_age(order)
+    data_txt = [
+        (f"\u2022 {item[0].capitalize()}"
+         f"\ufe55 {item[1]} \n")
+        for item in data
+    ]
+    data_txt.append(f"\u2022 {'Соотношение полов клиентов'}\ufe55 \n")
+    for i in gender_data:
+        data_txt.append(f"\u2012 {i} \n")
+    data_txt.append(f"\u2022 {'Возраст клиентов'}\ufe55 \n")
+    for i in age_data:
+        data_txt.append(f"\u2012 {i} \n")
+    file = 'order_data.txt'
+    response = HttpResponse(data_txt, content_type='text/plain')
     response['Content-Disposition'] = f'attachment; filename={file}'
     return response
 
