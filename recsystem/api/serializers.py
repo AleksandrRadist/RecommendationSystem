@@ -1,7 +1,6 @@
 from analytics.models import Order, Message
 from rest_framework import serializers
-from rest_framework.fields import empty
-from rest_framework.settings import api_settings
+import datetime
 
 
 class OrderWriteSerializer(serializers.ModelSerializer):
@@ -13,6 +12,17 @@ class OrderWriteSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('company_name', 'email', 'date_start', 'date_end', 'category',)
         model = Order
+
+    def validate(self, data):
+        deadline = datetime.datetime.today() + datetime.timedelta(days=10)
+        date_start = data.get('date_start')
+        date_end = data.get('date_end')
+        if date_start < deadline or date_end < deadline:
+            raise serializers.ValidationError(
+                'Работа рекламы не может начаться ранее чем через 10 дней после создания заказа'
+            )
+        if date_start < date_end:
+            raise serializers.ValidationError('Конечная дата не может быть раньше начальной даты')
 
 
 class OrderSerializer(serializers.ModelSerializer):
