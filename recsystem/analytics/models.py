@@ -102,3 +102,13 @@ class Message(models.Model):
     email = models.EmailField()
     read_status = models.BooleanField(default=False)
     creation_date = models.DateTimeField(auto_now_add=True)
+
+
+class CommercialInfo(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='commercial_info')
+    shown_number = models.IntegerField(default=0)
+    clicked_number = models.IntegerField(default=0)
+    shown_clients = models.JSONField(null=True, blank=True)
+    clicked_clients = models.JSONField(null=True, blank=True)
+    performed_action_clients = models.JSONField(null=True, blank=True)
+    performed_action_number = models.IntegerField(default=0)

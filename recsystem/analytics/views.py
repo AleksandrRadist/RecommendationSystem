@@ -2,7 +2,6 @@ import csv
 import datetime
 import uuid
 import pytz
-import json
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse
@@ -10,8 +9,8 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
 from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
-from .models import Client, Category, Transaction, Subscription, Order, Message
-from .utils import get_clients_data_gender, get_clients_data_age
+from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
+from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info
 
 def load(request):
     with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
@@ -114,6 +113,18 @@ def order_page(request, order_id):
                   {'order': order})
 
 
+def order_commercial_info(request, info_id):
+    info = get_object_or_404(CommercialInfo, id=info_id)
+    conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
+    click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
+    flag = request.GET.get('clients', 'shown')
+    return render(request, 'commercial_info.html',
+                  {'info': info,
+                   'conversion_rate': conversion_rate,
+                   'click_through_rate': click_through_rate,
+                   'clients': flag})
+
+
 def order_confirm(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     order.confirmation_status = True
@@ -166,6 +177,9 @@ def order_complete(request, order_id):
     order.completion_status = True
     order.completion_date = datetime.datetime.now()
     order.save()
+    info = CommercialInfo(order=order)
+    info.save()
+    commercial_fake_info(info.id)
     return redirect('order', order_id=order_id)
 
 
@@ -219,8 +233,8 @@ def order_download(request, order_id):
         ('Всего дней', order.days),
         ('Ожидаемая цена услуги', order.price)
     ]
-    gender_data = get_clients_data_gender(order)
-    age_data = get_clients_data_age(order)
+    gender_data = get_clients_data_gender(order.clients)
+    age_data = get_clients_data_age(order.clients)
     data_txt = [
         (f"\u2022 {item[0].capitalize()}"
          f"\ufe55 {item[1]} \n")

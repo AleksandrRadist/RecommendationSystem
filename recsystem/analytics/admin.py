@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, Category, Transaction, Subscription, Order, Message
+from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -43,9 +43,15 @@ class MessageAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class CommercialInfoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'shown_number', 'clicked_number', 'performed_action_number',)
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Message, MessageAdmin)
+admin.site.register(CommercialInfo, CommercialInfoAdmin)
