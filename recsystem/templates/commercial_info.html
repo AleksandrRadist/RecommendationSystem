@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Информация о рекламе{% endblock %}
+{% block content %}
+    <div class="row">
+            <div class="col-md-5 mb-3 mt-1">
+                    <div class="card">
+                            <div class="card-body">
+                                    <div class="h2">
+                                         Код заказа: {{ info.order.code }}
+                                    </div>
+                                    <div class="h3 text-muted">
+                                         <a><strong class="d-block text-dark">Компания: {{ info.order.company_name }}</strong></a>
+                                         <a><strong class="d-block text-dark">Категория: {{ info.order.category }}</strong></a>
+                                         <a><strong class="d-block text-dark">Email: {{ info.order.email }}</strong></a>
+                                    </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                            <div class="h6 text-info">
+                                            Клиентов, которым показали рекламу: {{ info.shown_number }} <br />
+                                            Клиентов, перешедших по ссылке: {{ info.clicked_number }} <br />
+                                            Клиентов, выполнивших целевое действие: {{ info.performed_action_number }}
+                                            </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                            <div class="h6 text-info">
+                                                Conversion Rate: {{ conversion_rate }} %<br />
+                                                Click-Through Rate: {{ click_through_rate }} %
+                                            </div>
+                                    </li>
+                            </ul>
+                            <li class="list-group-item">
+                                <a class="btn btn-lg btn-primary"
+                                        href="{% url 'order' info.order.id %}" role="button">
+                                        Вернуться на страницу заказа
+                                </a>
+                            </li>
+                    </div>
+            </div>
+
+            <div class="col-md-7">
+                {% include "menu_commercial_info.html" %}
+                <div class="card mb-3 mt-1 shadow-sm">
+                        <div class="card-body">
+                                <p class="card-text">
+                                    {% include "polls.html" with order=info.order commercial=clients %}
+                                </p>
+
+                        </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}

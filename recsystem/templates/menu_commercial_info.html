@@ -1,0 +1,13 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if request.GET.clients == 'shown' %}active{% endif %}" href="{% url 'order_commercial_info' info_id=info.id  %}?clients=shown">Показали рекламу</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.GET.clients == 'clicked' %}active{% endif %}" href="{% url 'order_commercial_info' info_id=info.id %}?clients=clicked">Перешли по ссылке</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.GET.clients == 'performed_action' %}active{% endif %}" href="{% url 'order_commercial_info' info_id=info.id %}?clients=performed_action">Выполнили целевое дейсвтие</a>
+        </li>
+    </ul>
+</div>

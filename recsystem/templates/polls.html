@@ -1,0 +1,92 @@
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<div class="h2">
+    Соотношение полов клиентов
+</div>
+<div id="myChartGender"></div>
+<div class="h2">
+    Возраст клиентов
+</div>
+<div id="myChartAge"></div>
+<h1>{{ clients }}</h1>
+
+
+<script>
+    var state ={
+		'aitems':[],
+		'avalues':[],
+		'gitems':[],
+		'gvalues':[],
+	}
+
+	var objId = "{{order.id}}"
+    var commercial = "{{commercial}}"
+	var dataURL = `/order/data/gender/${objId}/?clients=${commercial}`
+    $.ajax({
+            method:'GET',
+            url:dataURL,
+            success:function(response){
+                for (var i in response){
+
+                    var key = Object.keys(response[i])[0]
+                    var value = Object.values(response[i])[0]
+
+                    state.gitems.push(key)
+                    state.gvalues.push(value)
+                }
+                buildChart()
+
+            }
+    })
+	var dataURL = `/order/data/age/${objId}/?commercial_info=${commercial}`
+    $.ajax({
+            method:'GET',
+            url:dataURL,
+            success:function(response){
+                for (var i in response){
+
+                    var key = Object.keys(response[i])[0]
+                    var value = Object.values(response[i])[0]
+
+                    state.aitems.push(key)
+                    state.avalues.push(value)
+                }
+                buildChart()
+
+            }
+    })
+    function buildChart(){
+			var chartAData = {
+			"type":"line",
+			"scale-x":{
+				"values":state.aitems
+			},
+			"series":[
+				{
+					"values":state.avalues
+				}
+			]
+		}
+			var chartGData = {
+			"type":"bar",
+			"scale-x":{
+				"values":state.gitems
+			},
+			"series":[
+				{
+					"values":state.gvalues
+				}
+			]
+		}
+
+		zingchart.render({
+		  id: "myChartGender",
+		  data: chartGData,
+		});
+		zingchart.render({
+		  id: "myChartAge",
+		  data: chartAData,
+		});
+	}
+
+</script>

@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Заказ{% endblock %}
 {% block content %}
-<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <div class="row">
             <div class="col-md-5 mb-3 mt-1">
                     <div class="card">
@@ -130,6 +128,12 @@
                                 role="button" href="{% url 'order_download' order.id %}">
                                 Скачать данные о заказе
                             </a>
+                            {% if order.completion_status %}
+                            <a class="btn btn-lg btn-info"
+                                role="button" href="{% url 'order_commercial_info' info_id=order.commercial_info.id %}">
+                                Текущая информация о рекламе
+                            </a>
+                            {% endif %}
                     </div>
             </div>
 
@@ -137,96 +141,7 @@
                 <div class="card mb-3 mt-1 shadow-sm">
                         <div class="card-body">
                                 <p class="card-text">
-                                    <div class="h2">
-                                        Соотношение полов клиентов
-                                    </div>
-                                    <div id="myChartGender"></div>
-                                    <div class="h2">
-                                        Возраст клиентов
-                                    </div>
-                                    <div id="myChartAge"></div>
-
-
-
-<script>
-    var state ={
-		'aitems':[],
-		'avalues':[],
-		'gitems':[],
-		'gvalues':[],
-	}
-
-	var objId = "{{order.id}}"
-
-	var dataURL = `/order/data/gender/${objId}/`
-    $.ajax({
-            method:'GET',
-            url:dataURL,
-            success:function(response){
-                for (var i in response){
-
-                    var key = Object.keys(response[i])[0]
-                    var value = Object.values(response[i])[0]
-
-                    state.gitems.push(key)
-                    state.gvalues.push(value)
-                }
-                buildChart()
-
-            }
-    })
-	var dataURL = `/order/data/age/${objId}/`
-    $.ajax({
-            method:'GET',
-            url:dataURL,
-            success:function(response){
-                for (var i in response){
-
-                    var key = Object.keys(response[i])[0]
-                    var value = Object.values(response[i])[0]
-
-                    state.aitems.push(key)
-                    state.avalues.push(value)
-                }
-                buildChart()
-
-            }
-    })
-    function buildChart(){
-			var chartAData = {
-			"type":"line",
-			"scale-x":{
-				"values":state.aitems
-			},
-			"series":[
-				{
-					"values":state.avalues
-				}
-			]
-		}
-			var chartGData = {
-			"type":"bar",
-			"scale-x":{
-				"values":state.gitems
-			},
-			"series":[
-				{
-					"values":state.gvalues
-				}
-			]
-		}
-
-		zingchart.render({
-		  id: "myChartGender",
-		  data: chartGData,
-		});
-		zingchart.render({
-		  id: "myChartAge",
-		  data: chartAData,
-		});
-	}
-
-</script>
+                                    {% include "polls.html" with order=order %}
                                 </p>
                         </div>
                 </div>
