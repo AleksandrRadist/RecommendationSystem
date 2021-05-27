@@ -8,6 +8,7 @@ urlpatterns = [
     path('auth/logout/', LogoutView.as_view(), name='logout'),
     path('demo/',  views.demo_notification, name='demo'),
     path('order/<int:order_id>/', views.order_page, name='order'),
+    path('order/commercial_info/<int:info_id>/', views.order_commercial_info, name='order_commercial_info'),
     path('order/data/gender/<int:order_id>/', poll_views.order_data_gender, name='order_data_gender'),
     path('order/data/age/<int:order_id>/', poll_views.order_data_age, name='order_data_age'),
     path('order/new/', views.order_new, name='order_new'),
