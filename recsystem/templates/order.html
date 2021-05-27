@@ -124,16 +124,16 @@
                                             {% endif %}
                                     {% endif %}
                             {% endif%}
-                            <a class="btn btn-lg btn-primary"
-                                role="button" href="{% url 'order_download' order.id %}">
-                                Скачать данные о заказе
-                            </a>
                             {% if order.completion_status %}
                             <a class="btn btn-lg btn-info"
                                 role="button" href="{% url 'order_commercial_info' info_id=order.commercial_info.id %}">
                                 Текущая информация о рекламе
                             </a>
                             {% endif %}
+                            <a class="btn btn-lg btn-primary"
+                                role="button" href="{% url 'order_download' order.id %}">
+                                Скачать данные о заказе
+                            </a>
                     </div>
             </div>
 
