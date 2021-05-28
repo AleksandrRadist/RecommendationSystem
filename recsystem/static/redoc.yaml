@@ -213,7 +213,7 @@ paths:
       - jwt_auth:
         - write:admin
 
-  /orders/confirmed/:
+  /orders/?filter=confirmed:
     get:
       tags:
         - ORDERS
@@ -272,12 +272,12 @@ paths:
         - read:admin
 
 
-  /orders/unconfirmed/:
+  /orders/?filter=unconfirmed:
     get:
       tags:
         - ORDERS
       description: |
-        Список всех подтвержденных заказов
+        Список всех неподтвержденных заказов
       responses:
         200:
           description: Список объектов
@@ -331,7 +331,7 @@ paths:
         - read:admin
 
 
-  /orders/accepted/:
+  /orders/?filter=accepted:
     get:
       tags:
         - ORDERS
@@ -390,7 +390,7 @@ paths:
         - read:admin
 
 
-  /orders/completed/:
+  /orders/?filter=completed:
     get:
       tags:
         - ORDERS
@@ -915,7 +915,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ValidationError'
 
-  /messages/new/:
+  /messages/?filter=new:
     get:
       tags:
         - MESSAGES
@@ -949,7 +949,7 @@ paths:
       - jwt_auth:
         - read:admin
 
-  /messages/read/:
+  /messages/?filter=read:
     get:
       tags:
         - MESSAGES
@@ -1058,6 +1058,83 @@ paths:
         403:
           description: Нет прав доступа
 
+  /orders/<order_id>/commercial_info/:
+    parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Id заказа
+        schema:
+          type: number
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Информация о рекламе
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shown_number:
+                    type: number
+                  clicked_number:
+                    type: number
+                  performed_action_number:
+                    type: number
+                  shown_clients:
+                    type: string
+                  clicked_clients:
+                    type: string
+                  performed_action_clients:
+                    type: string
+        401:
+          description: Токен не валиден
+        403:
+          description: Нет прав доступа
+        404:
+          description: Объект не найдет
+        409:
+          description: Заказ еще не начал рекламу
+      security:
+      - jwt_auth:
+        - read:admin
+        -
+  /orders/public/<order_id>/commercial_info/:
+    parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Id заказа
+        schema:
+          type: number
+    get:
+      tags:
+        - ORDERS
+      description: |
+        Информация о рекламе для клиента
+      responses:
+        200:
+          description: Объект
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shown_number:
+                    type: number
+                  clicked_number:
+                    type: number
+                  performed_action_number:
+                    type: number
+
+        404:
+          description: Объект не найдет
+        409:
+          description: Заказ еще не начал рекламу
 
 components:
   schemas:
@@ -1086,5 +1163,3 @@ components:
       type: apiKey
       name: Bearer
       in: header
-
-

@@ -1,13 +1,14 @@
 import uuid
 import datetime
-from analytics.models import Order, Category, Transaction, Message
+from analytics.models import Order, Category, Transaction, Message, CommercialInfo
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .serializers import (OrderSerializer, OrderPublicSerializer, OrderWriteSerializer, MessageSerializer,
-                          MessagePublicSerializer, MessageWriteSerializer)
+                          MessagePublicSerializer, MessageWriteSerializer, CommercialInfoPublicSerializer,
+                          CommercialInfoSerializer)
 
 
 @api_view(['GET'])
@@ -73,45 +74,19 @@ def api_orders(request):
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
-        orders = Order.objects.all()
+        order_filter = request.GET.get('filter', 'All')
+        if order_filter == 'unconfirmed':
+            orders = Order.objects.order_by('-creation_date').filter(confirmation_status=False)
+        elif order_filter == 'confirmed':
+            orders = Order.objects.filter(confirmation_status=True, acceptance_status=False).order_by('-creation_date')
+        elif order_filter == 'accepted':
+            orders = Order.objects.filter(acceptance_status=True, completion_status=False).order_by('-acceptance_date')
+        elif order_filter == 'completed':
+            orders = Order.objects.filter(completion_status=True).order_by('-completion_date')
+        else:
+            orders = Order.objects.order_by('-creation_date').all()
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
-
-
-@api_view(['GET'])
-def api_orders_confirmed(request):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    orders = Order.objects.filter(confirmation_status=True, acceptance_status=False)
-    serializer = OrderSerializer(orders)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-def api_orders_unconfirmed(request):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    orders = Order.objects.filter(confirmation_status=False)
-    serializer = OrderSerializer(orders)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-def api_orders_accepted(request):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    orders = Order.objects.filter(acceptance_status=True, completion_status=False)
-    serializer = OrderSerializer(orders)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-def api_orders_completed(request):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    orders = Order.objects.filter(completion_status=True)
-    serializer = OrderSerializer(orders)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -184,7 +159,13 @@ def api_messages(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     if not request.user.is_authenticated:
         return Response(status=status.HTTP_403_FORBIDDEN)
-    messages = Message.objects.all()
+    message_filter = request.GET.get('filter', 'All')
+    if message_filter == 'new':
+        messages = Message.objects.filter(read_status=False).order_by('-creation_date')
+    elif message_filter == 'read':
+        messages = Message.objects.filter(read_status=True).order_by('-creation_date')
+    else:
+        messages = Message.objects.order_by('-creation_date')
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
 
@@ -210,19 +191,21 @@ def api_messages_read_all(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(["GET"])
-def api_messages_new(request):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    messages = Message.objects.filter(read_status=False)
-    serializer = MessageSerializer(messages, many=True)
-    return Response(serializer.data)
+@api_view(['GET'])
+def api_orders_public_commercial_info(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if order.completion_status:
+        info = CommercialInfo.objects.get(order=order)
+        serializer = CommercialInfoPublicSerializer(info)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_409_CONFLICT)
 
 
-@api_view(["GET"])
-def api_messages_red(request):
-    if not request.user.is_authenticated:
-        return Response(status=status.HTTP_403_FORBIDDEN)
-    messages = Message.objects.filter(read_status=True)
-    serializer = MessageSerializer(messages, many=True)
-    return Response(serializer.data)
+@api_view(['GET'])
+def api_orders_commercial_info(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if order.completion_status:
+        info = CommercialInfo.objects.get(order=order)
+        serializer = CommercialInfoSerializer(info)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_409_CONFLICT)

@@ -1,11 +1,29 @@
 {% extends "base.html" %}
-{% block title %} Все заказы {% endblock %}
+{% block title %} {{ filter }} заказы {% endblock %}
 {% block content %}
     <div class="container">
         {% include "menu_orders.html" %}
-        <h1> Все заказы </h1>
+        <h1> {{ filter }} заказы </h1>
         {% for order in page %}
-            {% include "order_item.html" with order=order %}
+            <div class="card mb-3 mt-1 shadow-sm">
+
+                    <div class="card-body">
+                            <p class="card-text">
+                                    <a name="order_{{ order.id }}" href="{% url 'order' order.id %}">
+                                            <strong class="d-block text-gray-dark">{{ order.code }}</strong>
+                                    </a>
+                                    Компания: {{ order.company_name }}
+                            </p>
+
+                            <a class="card-link muted">
+                                    <strong class="d-block text-gray-dark">Категория: {{ order.category }}</strong>
+                            </a>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{ order.creation_date }}</small>
+                            </div>
+                    </div>
+            </div>
         {% endfor %}
         {% if not page %}
         <div class="card mb-3 mt-1 shadow-sm">
