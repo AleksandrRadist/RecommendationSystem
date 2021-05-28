@@ -1,4 +1,4 @@
-from analytics.models import Order, Message
+from analytics.models import Order, Message, CommercialInfo
 from rest_framework import serializers
 import datetime
 
@@ -60,3 +60,16 @@ class MessagePublicSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('text', 'email')
         model = Message
+
+
+class CommercialInfoPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('shown_number', 'clicked_number', 'performed_action_number',)
+        model = CommercialInfo
+
+
+class CommercialInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('shown_number', 'clicked_number', 'performed_action_number',
+                  'shown_clients', 'clicked_clients', 'performed_action_clients',)
+        model = CommercialInfo

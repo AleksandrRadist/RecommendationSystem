@@ -126,7 +126,7 @@
                             {% endif%}
                             {% if order.completion_status %}
                             <a class="btn btn-lg btn-info"
-                                role="button" href="{% url 'order_commercial_info' info_id=order.commercial_info.id %}">
+                                role="button" href="{% url 'order_commercial_info' order_id=order.id %}">
                                 Текущая информация о рекламе
                             </a>
                             {% endif %}

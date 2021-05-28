@@ -11,6 +11,8 @@ from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
 from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
 from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info
+from django.urls import reverse
+
 
 def load(request):
     with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
@@ -113,11 +115,12 @@ def order_page(request, order_id):
                   {'order': order})
 
 
-def order_commercial_info(request, info_id):
-    info = get_object_or_404(CommercialInfo, id=info_id)
+def order_commercial_info(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    info = get_object_or_404(CommercialInfo, order=order)
     conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
     click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
-    flag = request.GET.get('clients', 'shown')
+    flag = request.GET.get('clients', None)
     return render(request, 'commercial_info.html',
                   {'info': info,
                    'conversion_rate': conversion_rate,
@@ -253,63 +256,31 @@ def order_download(request, order_id):
 
 
 @login_required
-def confirmed_orders(request):
-    orders = Order.objects.filter(confirmation_status=True, acceptance_status=False).order_by('-creation_date')
-    paginator = Paginator(orders, paginator_items_on_page)
-    page_number = request.GET.get(
-        'page')
-    page = paginator.get_page(
-        page_number)
-    return render(request, 'confirmed_orders.html',
-                  {'page': page})
-
-
-@login_required
-def all_orders(request):
-    orders = Order.objects.order_by('-creation_date').all()
+def orders_page(request):
+    order_filter = request.GET.get('filter', 'All')
+    if order_filter == 'unconfirmed':
+        orders = Order.objects.order_by('-creation_date').filter(confirmation_status=False)
+        order_filter = 'Неподтвержденные'
+    elif order_filter == 'confirmed':
+        orders = Order.objects.filter(confirmation_status=True, acceptance_status=False).order_by('-creation_date')
+        order_filter = 'Подтвержденные'
+    elif order_filter == 'accepted':
+        orders = Order.objects.filter(acceptance_status=True, completion_status=False).order_by('-acceptance_date')
+        order_filter = 'Принятые'
+    elif order_filter == 'completed':
+        orders = Order.objects.filter(completion_status=True).order_by('-completion_date')
+        order_filter = 'Выполненные'
+    else:
+        orders = Order.objects.order_by('-creation_date').all()
+        order_filter = 'Все'
     paginator = Paginator(orders, paginator_items_on_page)
     page_number = request.GET.get(
         'page')
     page = paginator.get_page(
         page_number)
     return render(request, 'orders.html',
-                  {'page': page})
-
-
-@login_required
-def accepted_orders(request):
-    orders = Order.objects.filter(acceptance_status=True, completion_status=False).order_by('-acceptance_date')
-    paginator = Paginator(orders, paginator_items_on_page)
-    page_number = request.GET.get(
-        'page')
-    page = paginator.get_page(
-        page_number)
-    return render(request, 'accepted_orders.html',
-                  {'page': page})
-
-
-@login_required
-def completed_orders(request):
-    orders = Order.objects.filter(completion_status=True).order_by('-completion_date')
-    paginator = Paginator(orders, paginator_items_on_page)
-    page_number = request.GET.get(
-        'page')
-    page = paginator.get_page(
-        page_number)
-    return render(request, 'completed_orders.html',
-                  {'page': page})
-
-
-@login_required
-def unconfirmed_orders(request):
-    orders = Order.objects.filter(confirmation_status=False).order_by('-creation_date')
-    paginator = Paginator(orders, paginator_items_on_page)
-    page_number = request.GET.get(
-        'page')
-    page = paginator.get_page(
-        page_number)
-    return render(request, 'unconfirmed_orders.html',
-                  {'page': page})
+                  {'page': page,
+                   'filter': order_filter})
 
 
 def contacts(request):
@@ -364,21 +335,43 @@ def read_messages(request):
 
 
 @login_required
-def messages_read(request, message_id, prev_url):
-    message = get_object_or_404(Message, id=message_id)
-    message.read_status = True
-    message.save()
-    return redirect(prev_url)
+def messages_page(request):
+    message_filter = request.GET.get('filter', 'All')
+    if message_filter == 'new':
+        messages = Message.objects.filter(read_status=False).order_by('-creation_date')
+        message_filter = 'Новые'
+    elif message_filter == 'read':
+        messages = Message.objects.filter(read_status=True).order_by('-creation_date')
+        message_filter = 'Прочитанные'
+    else:
+        messages = Message.objects.order_by('-creation_date')
+        message_filter = 'Все'
+    paginator = Paginator(messages, paginator_items_on_page)
+    page_number = request.GET.get(
+        'page')
+    page = paginator.get_page(
+        page_number)
+    return render(request, 'messages.html',
+                  {'page': page,
+                   'filter': message_filter})
 
 
 @login_required
-def messages_read_all(request, prev_url):
+def messages_read(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    message.read_status = True
+    message.save()
+    url = reverse('messages')
+    if request.GET.get('previous', None) is not None:
+        url += '?filter=new'
+    return redirect(url)
+
+
+@login_required
+def messages_read_all(request):
     messages = Message.objects.all()
     messages.update(read_status=True)
-    return redirect(prev_url)
-
-
-
-
-
-
+    url = reverse('messages')
+    if request.GET.get('previous', None) is not None:
+        url += '?filter=new'
+    return redirect(url)

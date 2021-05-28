@@ -2,13 +2,13 @@
 <div class="row">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'all_messages' %}active{% endif %}" href="{% url 'all_messages' %}">Все сообщения</a>
+            <a class="nav-link {% if request.GET.filter == None %}active{% endif %}" href="{% url 'messages' %}">Все сообщения</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'new_messages' %}active{% endif %}" href="{% url 'new_messages' %}">Новые сообщения</a>
+            <a class="nav-link {% if request.GET.filter == 'new' %}active{% endif %}" href="{% url 'messages' %}?filter=new">Новые сообщения</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'read_messages' %}active{% endif %}" href="{% url 'read_messages' %}">Прочитанные сообщения</a>
+            <a class="nav-link {% if request.GET.filter == 'read' %}active{% endif %}" href="{% url 'messages' %}?filter=read">Прочитанные сообщения</a>
         </li>
     </ul>
 </div>
