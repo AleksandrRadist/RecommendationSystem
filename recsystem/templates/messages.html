@@ -1,17 +1,49 @@
 {% extends "base.html" %}
-{% block title %} Все сообщения {% endblock %}
+{% block title %} {{ filter }} сообщения {% endblock %}
 {% block content %}
     <div class="container">
         {% include "menu_messages.html" %}
-        <h1> Сообщения </h1>
-        {% if page %}
+        <h1> {{ filter }} сообщения</h1>
+        {% if filter != 'Прочитанные' and page %}
+        {% if filter == None %}
         <a class="btn btn-info btn-lg btn-block"
-            role="button" href="{% url 'messages_read_all' request.resolver_match.url_name %}">
+            role="button" href="{% url 'messages_read_all' %}">
+            Прочитать все
+        </a>
+        {% else %}
+        <a class="btn btn-info btn-lg btn-block"
+            role="button" href="{% url 'messages_read_all' %}?previous=new">
             Прочитать все
         </a>
         {% endif %}
-        {% for item in page %}
-            {% include "message_item.html" with message=item %}
+        {% endif %}
+        {% for message in page %}
+            <div class="card mb-3 mt-1 shadow-sm">
+                    <div class="card-body">
+                            <p class="card-text">
+                                {% if not message.read_status %}
+                                    {% if filter == None %}
+                                    <div class="alert alert-info" role="alert">
+                                      <a href="{% url 'messages_read' message.id %}" class="alert-link">Новое сообщение!</a>
+                                    </div>
+                                    {% else %}
+                                    <div class="alert alert-info" role="alert">
+                                      <a href="{% url 'messages_read' message.id %}?previous=new" class="alert-link">Новое сообщение!</a>
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+                                <a>
+                                    <strong class="d-block text-gray-dark">{{ message.email }}</strong>
+                                </a>
+                                <a>
+                                    <strong class="d-block text-gray-dark"></strong>{{ message.text|linebreaksbr }}
+                                </a>
+                                <div class="h6 text-primary">
+                                    {{ message.creation_date }}
+                                </div>
+                            </p>
+                    </div>
+            </div>
         {% endfor %}
         {% if not page %}
             <div class="card mb-3 mt-1 shadow-sm">
