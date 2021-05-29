@@ -214,7 +214,8 @@ def demo_notification(request):
 
 
 def categories(request):
-    items = Category.objects.all()
+    exclude_categories = [28, 29]
+    items = Category.objects.exclude(id__in=exclude_categories)
     paginator = Paginator(items, paginator_items_on_page)
     page_number = request.GET.get(
         'page')
