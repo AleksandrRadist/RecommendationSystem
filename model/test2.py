@@ -2,9 +2,10 @@ import psycopg2
 
 print('Connecting to the PostgreSQL database...')
 db_connect = psycopg2.connect(
-    host='localhost',
+    host='127.0.0.1',
+    port='5432',
     database='reccomendation_system',
-    user='Aleksandr',
+    user='aleks',
     password='qweasd'
 )
 
@@ -14,4 +15,6 @@ print('hi')
 print('PostgreSQL database version:')
 cursor.execute('SELECT version()')
 
+db_version = cursor.fetchone()
+print(db_version)
 
