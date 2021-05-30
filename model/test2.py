@@ -10,6 +10,7 @@ db_connect = psycopg2.connect(
 
 cursor = db_connect.cursor()
 
+print('hi')
 print('PostgreSQL database version:')
 cursor.execute('SELECT version()')
 
