@@ -57,7 +57,7 @@ def data_processing(clients, categories, transactions):
         .merge(transactions_last_date, on=['client_id', 'product_category']) \
         .rename(columns={'date': 'last_date'})
     split_date = date(2020, 12, 30)
-    print(data['last_date'] < split_date)
+    
     data_train = data.query('last_date < @split_date').copy()
     data_test = data.query('last_date >= @split_date').copy()
     data_true = (
