@@ -1,6 +1,6 @@
 import psycopg2
+import pandas as pd
 
-print('Connecting to the PostgreSQL database...')
 db_connect = psycopg2.connect(
     host='127.0.0.1',
     port='5432',
@@ -11,10 +11,7 @@ db_connect = psycopg2.connect(
 
 cursor = db_connect.cursor()
 
-print('hi')
-print('PostgreSQL database version:')
-cursor.execute('SELECT version()')
-
-db_version = cursor.fetchone()
-print(db_version)
-
+select_transactions_data = 'SELECT * FROM analytics_transaction'
+cursor.execute(select_transactions_data)
+transaction_data = cursor.fetchall()
+print(transaction_data)
