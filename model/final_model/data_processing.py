@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from datetime import date
 
 
 def data_processing(clients, categories, transactions):
@@ -26,7 +27,7 @@ def data_processing(clients, categories, transactions):
     transactions.product_category = transactions.product_category.astype('str')
     transactions.client_id = transactions.client_id.astype('str')
     transactions.id = transactions.id.astype('str')
-    transactions.date = pd.to_datetime(transactions.date, format='%Y-%m-%d %H:%M:%S')
+    transactions.date = pd.to_datetime(transactions.date, format='%Y-%m-%d %H:%M:%S').dt.date
     transactions = transactions.query('transaction_type != "Positive"')
     transactions = transactions.query('product_category != "28"')
     transactions = transactions.query('product_category != "29"')
@@ -55,7 +56,8 @@ def data_processing(clients, categories, transactions):
     data = data \
         .merge(transactions_last_date, on=['client_id', 'product_category']) \
         .rename(columns={'date': 'last_date'})
-    split_date = '2020-12-30'
+    split_date = date(2020, 12, 30)
+    print(data['last_date'] < split_date)
     data_train = data.query('last_date < @split_date').copy()
     data_test = data.query('last_date >= @split_date').copy()
     data_true = (
