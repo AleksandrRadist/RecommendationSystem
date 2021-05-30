@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render
 from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
 from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
-from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info
+from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info, get_recommendation_model_data
 from django.urls import reverse
 
 
@@ -376,3 +376,9 @@ def messages_read_all(request):
     if request.GET.get('previous', None) is not None:
         url += '?filter=new'
     return redirect(url)
+
+
+def test(request):
+    data = get_recommendation_model_data('test')
+    print(data)
+    return redirect('index')

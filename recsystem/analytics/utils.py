@@ -1,4 +1,4 @@
-from .models import Client, CommercialInfo
+from .models import Client, CommercialInfo, Transaction, RecommendationModel, RecommendationData, Category
 from django.db.models import Count
 import datetime
 from django.shortcuts import get_object_or_404
@@ -40,3 +40,21 @@ def commercial_fake_info(info_id):
     info.clicked_clients = clients[0:info.clicked_number:]
     info.performed_action_clients = clients[0:info.performed_action_number:]
     info.save()
+
+
+def get_recommendation_model_data(name):
+    model = RecommendationModel.objects.get(name=name)
+    d = {1: [1, 2, 3], 2: [4, 5, 10], 3: [7, 8, 9]}
+    if model.last_update is None or model.last_update.date() != datetime.datetime.now().date():
+        for i in d.keys():
+            category = Category.objects.get(id=i)
+            if model.data.filter(category=category).exists():
+                data = RecommendationData.objects.get(category=category)
+                data.clients = d[i]
+                data.save()
+            else:
+                data = RecommendationData.objects.create(category=category, clients=d[i])
+                model.data.add(data)
+        model.last_update = datetime.datetime.now()
+        model.save()
+    return model.data.all()

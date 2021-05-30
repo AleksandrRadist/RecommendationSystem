@@ -23,5 +23,6 @@ urlpatterns = [
     path('messages/', views.messages_page, name='messages'),
     path('messages/<int:message_id>/read/', views.messages_read, name='messages_read'),
     path('messages/read/all/', views.messages_read_all, name='messages_read_all'),
+    path('test/', views.test),
     path('', views.index, name='index'),
 ]
