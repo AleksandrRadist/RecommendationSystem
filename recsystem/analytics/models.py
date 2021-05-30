@@ -28,9 +28,7 @@ CATEGORY_CHOICES = [
     ('Авиабилеты', 'Авиабилеты'),
     ('Дьюти-фри', 'Дьюти-фри'),
     ('Железнодорожные билеты', 'Железнодорожные билеты'),
-    ('Искусство', 'Искусство'),
-    ('Переводы', 'Переводы'),
-    ('Другое', 'Другое')
+    ('Искусство', 'Искусство')
 ]
 
 
@@ -105,10 +103,24 @@ class Message(models.Model):
 
 
 class CommercialInfo(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='commercial_info')
+    order = models.OneToOneField(
+        Order, on_delete=models.CASCADE,
+        related_name='commercial_info'
+    )
     shown_number = models.IntegerField(default=0)
     clicked_number = models.IntegerField(default=0)
     shown_clients = models.JSONField(null=True, blank=True)
     clicked_clients = models.JSONField(null=True, blank=True)
     performed_action_clients = models.JSONField(null=True, blank=True)
     performed_action_number = models.IntegerField(default=0)
+
+
+class RecommendationData(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    clients = models.JSONField()
+
+
+class RecommendationModel(models.Model):
+    name = models.CharField(max_length=200)
+    data = models.ManyToManyField(RecommendationData, null=True, blank=True)
+    last_update = models.DateTimeField(blank=True, null=True)

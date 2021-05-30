@@ -10,7 +10,7 @@ from django.shortcuts import redirect, render
 from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
 from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
-from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info
+from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info, get_recommendation_model_data
 from django.urls import reverse
 
 
@@ -120,7 +120,7 @@ def order_commercial_info(request, order_id):
     info = get_object_or_404(CommercialInfo, order=order)
     conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
     click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
-    flag = request.GET.get('clients', None)
+    flag = request.GET.get('clients', 'shown')
     return render(request, 'commercial_info.html',
                   {'info': info,
                    'conversion_rate': conversion_rate,
@@ -214,7 +214,8 @@ def demo_notification(request):
 
 
 def categories(request):
-    items = Category.objects.all()
+    exclude_categories = [28, 29]
+    items = Category.objects.exclude(id__in=exclude_categories)
     paginator = Paginator(items, paginator_items_on_page)
     page_number = request.GET.get(
         'page')
@@ -375,3 +376,9 @@ def messages_read_all(request):
     if request.GET.get('previous', None) is not None:
         url += '?filter=new'
     return redirect(url)
+
+
+def test(request):
+    data = get_recommendation_model_data('test')
+    print(data)
+    return redirect('index')
