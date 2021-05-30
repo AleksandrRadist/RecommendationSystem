@@ -17,8 +17,8 @@ def data_processing(clients, categories, transactions):
 
     # categories processing
     categories.id = categories.id.astype('str')
-    categories['mcc-code'] = categories['mcc-code'].fillna('no_code')
-    categories['mcc-code'] = categories['mcc-code'].astype('str')
+    categories['mcc_code'] = categories['mcc_code'].fillna('no_code')
+    categories['mcc_code'] = categories['mcc_code'].astype('str')
     categories = categories.rename(columns={'id': 'product_category'})
 
     # transactions processing

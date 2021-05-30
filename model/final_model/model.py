@@ -1,6 +1,8 @@
 import psycopg2
 import pandas.io.sql as sqlio
 from data_processing import data_processing
+import warnings
+warnings.filterwarnings('ignore')
 
 db_connect = psycopg2.connect(
     host='127.0.0.1',
