@@ -120,7 +120,7 @@ def order_commercial_info(request, order_id):
     info = get_object_or_404(CommercialInfo, order=order)
     conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
     click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
-    flag = request.GET.get('clients', None)
+    flag = request.GET.get('clients', 'shown')
     return render(request, 'commercial_info.html',
                   {'info': info,
                    'conversion_rate': conversion_rate,

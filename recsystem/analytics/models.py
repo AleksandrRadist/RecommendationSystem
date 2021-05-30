@@ -103,7 +103,10 @@ class Message(models.Model):
 
 
 class CommercialInfo(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='commercial_info')
+    order = models.OneToOneField(
+        Order, on_delete=models.CASCADE,
+        related_name='commercial_info'
+    )
     shown_number = models.IntegerField(default=0)
     clicked_number = models.IntegerField(default=0)
     shown_clients = models.JSONField(null=True, blank=True)
