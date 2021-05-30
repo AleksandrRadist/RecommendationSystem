@@ -4,6 +4,11 @@ from datetime import date
 
 
 def data_processing(clients, categories, transactions):
+    def list_nan(column_value):
+        if column_value == '0':
+            return list()
+        return column_value
+
     # clients preprocessing
     clients.id = clients.id.astype('str')
     clients = clients.rename(columns={'id': 'client_id'})
@@ -72,10 +77,6 @@ def data_processing(clients, categories, transactions):
             .groupby('client_id')['product_category'].agg(lambda x: list(x))
     )
     data_true.loc[data_true.true_test.isnull() == True, 'true_test'] = '0'
-    def list_nan(column_value):
-        if column_value == '0':
-            return list()
-        return column_value
     data_true.true_test = data_true.true_test.apply(list_nan)
 
     # data processing for collaborative filtering (latent factor model + singular value decomposition
