@@ -114,7 +114,6 @@ class CommercialInfo(models.Model):
     performed_action_number = models.IntegerField(default=0)
 
 
-
 class RecommendationData(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     clients = models.JSONField()
