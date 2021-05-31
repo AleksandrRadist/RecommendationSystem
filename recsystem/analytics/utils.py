@@ -4,9 +4,9 @@ import datetime
 from django.shortcuts import get_object_or_404
 import random
 import sys
-sys.path.insert(1, '/')
+sys.path.insert(1, '/home/bi2021/RecommendationSystem/model/final_model/')
 
-from model import model
+from model import model as updated_model_data
 
 
 def get_clients_data_gender(clients):
@@ -48,8 +48,8 @@ def commercial_fake_info(info_id):
 
 def get_recommendation_model_data(name):
     model = RecommendationModel.objects.get(name=name)
-    model_data, f = model()
     if model.last_update is None or model.last_update.date() != datetime.datetime.now().date():
+        model_data, f = updated_model_data()
         for i in model_data.keys():
             category = Category.objects.get(id=i)
             if model.data.filter(category=category).exists():
@@ -57,7 +57,7 @@ def get_recommendation_model_data(name):
                 data.clients = model_data[i]
                 data.save()
             else:
-                data = RecommendationData.objects.create(category=category, clients=d[i])
+                data = RecommendationData.objects.create(category=category, clients=model_data[i])
                 model.data.add(data)
         model.last_update = datetime.datetime.now()
         model.f_score = f
