@@ -16,3 +16,4 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(null=True, to='analytics.RecommendationData'),
         ),
     ]
+
