@@ -136,7 +136,7 @@ def order_commercial_info(request, order_id):
                    'conversion_rate': conversion_rate,
                    'click_through_rate': click_through_rate,
                    'cpa': cpa,
-                   'cpc': cpc,
+                   'cost_per_click': cpc,
                    'clients': flag})
 
 

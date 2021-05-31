@@ -35,8 +35,12 @@
                                                 {% else %}
                                                 CPA - Пока ни один клиент не выполнил целевое действие <br />
                                                 {% endif %}
-                                                {% if cpс %}
-                                                CPC: {{ cpс }} ₽<br />
+                                            </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                            <div class="h6 text-info">
+                                                {% if cost_per_click %}
+                                                CPC: {{ cost_per_click }} ₽<br />
                                                 {% else %}
                                                 CPC - Пока ни один клиент не перешел по ссылке  <br />
                                                 {% endif %}
