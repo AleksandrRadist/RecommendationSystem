@@ -130,7 +130,7 @@ def order_commercial_info(request, order_id):
         click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
     if info.performed_action_number != 0:
         cpa = round(order.price / info.performed_action_number, 2)
-    flag = request.GET.get('clients', None)
+    flag = request.GET.get('clients', 'shown')
     return render(request, 'commercial_info.html',
                   {'info': info,
                    'conversion_rate': conversion_rate,
