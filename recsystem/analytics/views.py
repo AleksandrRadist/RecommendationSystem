@@ -122,7 +122,9 @@ def order_page(request, order_id):
 def order_commercial_info(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     info = get_object_or_404(CommercialInfo, order=order)
-    conversion_rate, cpa, click_through_rate, cpc = 0, False, 0, False
+    conversion_rate, click_through_rate = 0, 0
+    cpc = 'Пока ни один клиент не перешел по ссылке'
+    cpa = 'Пока ни один клиент не выполнил целевое действие'
     if info.clicked_number != 0:
         conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
         cpc = round(order.price / info.clicked_number, 2)
