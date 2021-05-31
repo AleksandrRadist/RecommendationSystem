@@ -112,3 +112,17 @@ class CommercialInfo(models.Model):
     clicked_clients = models.JSONField(null=True, blank=True)
     performed_action_clients = models.JSONField(null=True, blank=True)
     performed_action_number = models.IntegerField(default=0)
+
+
+
+class RecommendationData(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    clients = models.JSONField()
+
+
+class RecommendationModel(models.Model):
+    name = models.CharField(max_length=200)
+    data = models.ManyToManyField(RecommendationData, null=True, blank=True)
+    last_update = models.DateTimeField(blank=True, null=True)
+    f_score = models.FloatField(default=0)
+
