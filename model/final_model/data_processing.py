@@ -66,9 +66,6 @@ def data_processing(clients, categories, transactions):
     data_train = data.query('last_date < @split_date').copy()
     data_test = data.query('last_date >= @split_date').copy()
 
-    print(f'Доля взаимодействий в тренировочной выборке: {round(data_train.shape[0] / data.shape[0], 1)} ({data_train.shape[0]})')
-    print(f'Доля взаимодействий в тестовой выборке: {round(data_test.shape[0] / data.shape[0], 1)} ({data_test.shape[0]})')
-
     data_true = (
         data_train
             .groupby('client_id')['product_category'].agg(lambda x: list(x))

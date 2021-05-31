@@ -65,16 +65,15 @@ def model():
 
     dict_category_clients = {}
     data_true.reset_index(inplace=True)
-    for row in range(len(data_true.shape[0])):
+    for row in range(data_true.shape[0]):
         category = data_true.loc[row, 'prediction_svd'][0]
         client = data_true.loc[row, 'client_id']
         if category not in dict_category_clients.keys():
             dict_category_clients[category] = []
-            dict_category_clients.append(client)
+            dict_category_clients[category].append(client)
         else:
             dict_category_clients[category].append(client)
 
-    print(dict_category_clients)
-
+    return dict_category_clients, fscore
 
 model()
