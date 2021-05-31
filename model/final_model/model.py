@@ -67,7 +67,7 @@ def model():
     # оценка модели по метрике качества F-score@1
     fscore = calc_fscore_precision("prediction_svd")
 
-    print(data_true)
-    print(fscore)
-
     db_connect = None
+
+model()
+

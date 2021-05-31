@@ -6,15 +6,15 @@ from scipy.linalg import svd
 def latent_factor_model_with_svd(data_matrix, data_true, top_k):
     U, sigma, V = svd(data_matrix)
 
-    Sigma = np.zeros((1000, 27))
+    Sigma = np.zeros((200, 27))
     Sigma[:27, :27] = np.diag(sigma)
 
     new_data_matrix = U.dot(Sigma).dot(V)
 
     K = 25
     sigma[K:] = 0
-    Sigma = np.zeros((1000, 27))
-    Sigma[:25, :25] = np.diag(sigma)
+    Sigma = np.zeros((200, 27))
+    Sigma[:27, :27] = np.diag(sigma)
 
     new_data_matrix = U.dot(Sigma).dot(V)
 
