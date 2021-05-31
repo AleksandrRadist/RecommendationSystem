@@ -124,3 +124,4 @@ class RecommendationModel(models.Model):
     name = models.CharField(max_length=200)
     data = models.ManyToManyField(RecommendationData, null=True, blank=True)
     last_update = models.DateTimeField(blank=True, null=True)
+    f_score = models.FloatField(default=0)

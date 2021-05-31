@@ -376,9 +376,3 @@ def messages_read_all(request):
     if request.GET.get('previous', None) is not None:
         url += '?filter=new'
     return redirect(url)
-
-
-def test(request):
-    data = get_recommendation_model_data('test')
-    print(data)
-    return redirect('index')
