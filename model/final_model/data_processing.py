@@ -83,4 +83,4 @@ def data_processing(clients, categories, transactions):
     data_matrix = pd.pivot_table(data, index='client_id', columns='product_category', values='purchase_normalize',
                                  fill_value=0)
 
-    return data_matrix
+    return data_matrix, data_true
