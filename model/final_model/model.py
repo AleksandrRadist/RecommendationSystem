@@ -46,14 +46,10 @@ def model():
         password='qweasd'
     )
 
-    # cursor = db_connect.cursor()
-
     select_clients_data = 'SELECT * FROM analytics_client'
     select_categories_data = 'SELECT * FROM analytics_category'
     select_transactions_data = 'SELECT * FROM analytics_transaction'
 
-    # cursor.execute(select_transactions_data)
-    # transaction_data = cursor.fetchall()
     clients_data = sqlio.read_sql_query(select_clients_data, db_connect)
     categories_data = sqlio.read_sql_query(select_categories_data, db_connect)
     transaction_data = sqlio.read_sql_query(select_transactions_data, db_connect)
@@ -67,7 +63,18 @@ def model():
     # оценка модели по метрике качества F-score@1
     fscore = calc_fscore_precision("prediction_svd")
 
-    db_connect = None
+    dict_category_clients = {}
+    data_true.reset_index(inplace=True)
+    for row in range(len(data_true.shape[0])):
+        category = data_true.loc[row, 'prediction_svd'][0]
+        client = data_true.loc[row, 'client_id']
+        if category not in dict_category_clients.keys():
+            dict_category_clients[category] = []
+            dict_category_clients.append(client)
+        else:
+            dict_category_clients[category].append(client)
+
+    print(dict_category_clients)
+
 
 model()
-
