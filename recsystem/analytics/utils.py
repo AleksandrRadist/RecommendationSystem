@@ -1,4 +1,4 @@
-from .models import Client, CommercialInfo, Transaction, RecommendationModel, RecommendationData, Category
+from .models import Client, CommercialInfo
 from django.db.models import Count
 import datetime
 from django.shortcuts import get_object_or_404
