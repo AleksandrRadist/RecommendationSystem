@@ -67,8 +67,8 @@ def get_recommendation_model_data(name):
 def commercial_fake_forecast_info(order):
     conversion_rate = round(random.random(), 2)
     click_through_rate = round(random.random(), 2)
-    cpa = round(order.price / click_through_rate, 2)
-    cpc = round(order.price / click_through_rate / 5 * 3, 2)
+    cpa = round(order.price / click_through_rate / order.clients_number / conversion_rate, 2)
+    cpc = round(order.price / click_through_rate * order.clients_number, 2)
     return {'conversion_rate': conversion_rate * 100,
             'click_through_rate': click_through_rate * 100,
             'cpc': cpc,
