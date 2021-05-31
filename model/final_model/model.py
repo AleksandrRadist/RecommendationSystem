@@ -35,7 +35,7 @@ def model():
         return fscore_precision
 
     # top k рекомендаций
-    top_k = 1
+    top_k = 10
 
     # соединение с базой данных PostgreSQL
     db_connect = psycopg2.connect(
