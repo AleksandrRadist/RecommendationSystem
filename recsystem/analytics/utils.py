@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404
 import random
 import sys
 sys.path.insert(1, '/home/bi2021/RecommendationSystem/model/final_model/')
-
 from model import model as updated_model_data
 
 
@@ -63,3 +62,14 @@ def get_recommendation_model_data(name):
         model.f_score = f
         model.save()
     return model.data.all()
+
+
+def commercial_fake_forecast_info(order):
+    conversion_rate = round(random.random(), 2)
+    click_through_rate = round(random.random(), 2)
+    cpa = round(order.price / click_through_rate, 2)
+    cpc = round(order.price / click_through_rate / 5 * 3, 2)
+    return {'conversion_rate': conversion_rate * 100,
+            'click_through_rate': click_through_rate * 100,
+            'cpc': cpc,
+            'cpa': cpa}

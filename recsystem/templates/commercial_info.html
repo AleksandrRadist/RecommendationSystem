@@ -28,6 +28,20 @@
                                                 Click-Through Rate: {{ click_through_rate }} %
                                             </div>
                                     </li>
+                                    <li class="list-group-item">
+                                            <div class="h6 text-info">
+                                                {% if cpa %}
+                                                CPA: {{ cpa }} ₽<br />
+                                                {% else %}
+                                                CPA - Пока ни один клиент не выполнил целевое действие <br />
+                                                {% endif %}
+                                                {% if cpс %}
+                                                CPC: {{ cpс }} ₽<br />
+                                                {% else %}
+                                                CPC - Пока ни один клиент не перешел по ссылке  <br />
+                                                {% endif %}
+                                            </div>
+                                    </li>
                             </ul>
                             <a class="btn btn-lg btn-primary"
                                     href="{% url 'order' info.order.id %}" role="button">

@@ -95,6 +95,10 @@ class Order(models.Model):
     completion_date = models.DateTimeField(null=True, blank=True)
     acceptance_status = models.BooleanField(default=False)
     acceptance_date = models.DateTimeField(null=True, blank=True)
+    forecast_conversion_rate = models.FloatField(default=0)
+    forecast_click_through_rate = models.FloatField(default=0)
+    forecast_cost_per_action = models.FloatField(default=0)
+    forecast_cost_per_click = models.FloatField(default=0)
 
 
 class Message(models.Model):

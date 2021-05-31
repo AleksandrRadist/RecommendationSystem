@@ -29,8 +29,17 @@
                                     </li>
                                     <li class="list-group-item">
                                             <div class="h6 text-primary">
-                                                Ожидаемая цена услуги:
-                                                {{ order.price }} ₽ <br/>
+                                                Цена услуги:
+                                                {{ order.price }} ₽
+                                            </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                            <div class="h6 text-primary">
+                                                Ожидаемые показатели: <br />
+                                                Conversion Rate: {{ order.forecast_conversion_rate }} %<br />
+                                                Click-Through Rate: {{ order.forecast_click_through_rate }} % <br />
+                                                CPA: {{ order.forecast_cost_per_action }} ₽<br />
+                                                CPC: {{ order.forecast_cost_per_click }} ₽<br />
                                             </div>
                                     </li>
                                     {% if request.user.is_authenticated %}

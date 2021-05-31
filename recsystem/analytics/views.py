@@ -9,9 +9,11 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
 from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
-from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo, RecommendationModel
-from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info, get_recommendation_model_data
+from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
+from .utils import get_clients_data_gender, get_clients_data_age, \
+    commercial_fake_info, get_recommendation_model_data, commercial_fake_forecast_info
 from django.urls import reverse
+import random
 
 
 def load(request):
@@ -99,11 +101,14 @@ def order_new(request):
             price = (order.days // 7 + 1) * 20 * order.clients_number
             order.price = price
             order.code = uuid.uuid4().hex[:10].upper()
+            forecast_data = commercial_fake_forecast_info(order)
+            order.forecast_conversion_rate = forecast_data['conversion_rate']
+            order.forecast_click_through_rate = forecast_data['click_through_rate']
+            order.forecast_cost_per_action = forecast_data['cpa']
+            order.forecast_cost_per_click = forecast_data['cpc']
             order.save()
             return redirect('order', order_id=order.pk)
-
         return render(request, 'new_order.html', {'form': form})
-
     form = OrderForm()
     return render(request, 'new_order.html', {'form': form})
 
@@ -117,13 +122,21 @@ def order_page(request, order_id):
 def order_commercial_info(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     info = get_object_or_404(CommercialInfo, order=order)
-    conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
-    click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
+    conversion_rate, cpa, click_through_rate, cpc = 0, False, 0, False
+    if info.clicked_number != 0:
+        conversion_rate = round(info.performed_action_number / info.clicked_number * 100, 2)
+        cpc = round(order.price / info.clicked_number, 2)
+    if info.shown_number != 0:
+        click_through_rate = round(info.clicked_number / info.shown_number * 100, 2)
+    if info.performed_action_number != 0:
+        cpa = round(order.price / info.performed_action_number, 2)
     flag = request.GET.get('clients', None)
     return render(request, 'commercial_info.html',
                   {'info': info,
                    'conversion_rate': conversion_rate,
                    'click_through_rate': click_through_rate,
+                   'cpa': cpa,
+                   'cpc': cpc,
                    'clients': flag})
 
 
