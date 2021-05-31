@@ -9,8 +9,8 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
 from recsystem.settings import paginator_items_on_page
 from .forms import OrderForm, MessageForm
-from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
-from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info
+from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo, RecommendationModel
+from .utils import get_clients_data_gender, get_clients_data_age, commercial_fake_info, get_recommendation_model_data
 from django.urls import reverse
 
 
@@ -85,14 +85,13 @@ def load(request):
 def order_new(request):
     if request.method == 'POST':
         form = OrderForm(request.POST or None)
-
         if form.is_valid():
             order = form.save(commit=False)
             category = Category.objects.get(name=order.category)
-            transactions = Transaction.objects.filter(product_category=category.id)
+            data = get_recommendation_model_data('version1')
             clients = []
-            for i in transactions.values('client_id').distinct():
-                clients.append(i['client_id'])
+            if data.filter(category=category).exists():
+                clients = data.get(category=category).clients
             order.clients = clients
             order.clients_number = len(order.clients)
             delta = order.date_end - order.date_start

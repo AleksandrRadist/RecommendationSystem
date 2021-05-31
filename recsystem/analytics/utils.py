@@ -1,4 +1,4 @@
-from .models import Client, CommercialInfo
+from .models import Client, CommercialInfo, RecommendationModel, RecommendationData, Category
 from django.db.models import Count
 import datetime
 from django.shortcuts import get_object_or_404
@@ -54,7 +54,7 @@ def get_recommendation_model_data(name):
             category = Category.objects.get(id=i)
             if model.data.filter(category=category).exists():
                 data = RecommendationData.objects.get(category=category)
-                data.clients = d[i]
+                data.clients = model_data[i]
                 data.save()
             else:
                 data = RecommendationData.objects.create(category=category, clients=d[i])

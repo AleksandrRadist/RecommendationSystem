@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
+from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo, RecommendationData, RecommendationModel
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -48,6 +48,16 @@ class CommercialInfoAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class RecommendationModelAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name',)
+    empty_value_display = '-пусто-'
+
+
+class RecommendationDataAdmin(admin.ModelAdmin):
+    list_display = ('id', 'category',)
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Client, ClientAdmin)
@@ -55,3 +65,5 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(CommercialInfo, CommercialInfoAdmin)
+admin.site.register(RecommendationData, RecommendationDataAdmin)
+admin.site.register(RecommendationModel, RecommendationModelAdmin)
