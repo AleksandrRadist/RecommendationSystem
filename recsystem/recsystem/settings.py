@@ -30,7 +30,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '81.88.118.62']
 
-
+if not DEBUG:
+    import sys
+    sys.path.insert(1, '/home/bi2021/RecommendationSystem/model/final_model/')
+    from model import model as updated_model_data
+else:
+    from .model_for_dev import model as updated_model_data
 # Application definition
 
 INSTALLED_APPS = [
@@ -96,15 +101,15 @@ JWT_AUTH = {
 
 if DEBUG:
     DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-     }
- }
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 else:
     DATABASES = {
      'default': env.db()
- }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
