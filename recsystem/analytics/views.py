@@ -17,22 +17,6 @@ import random
 
 
 def load(request):
-    with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
-        reader = csv.reader(fp, delimiter=",", quotechar='"')
-        data_read = [row for row in reader]
-        for row in data_read[1::]:
-            q = None
-            if row[6] != '':
-                q = datetime.datetime.strptime(row[6], "%Y-%m-%d").date()
-            _, created = Subscription.objects.get_or_create(
-                id=row[0],
-                client_id=int(row[1]),
-                product_category=int(row[2]),
-                product_company=row[3],
-                amount=float(row[4]),
-                date_start=datetime.datetime.strptime(row[5], "%Y-%m-%d").date(),
-                date_end=q
-            )
     with open("analytics/fgh.csv", encoding='utf-8') as fp:
         reader = csv.reader(fp, delimiter=",", quotechar='"')
         data_read = [row for row in reader]
@@ -65,16 +49,36 @@ def load(request):
                 credit=bool(row[11]),
                 deposit=bool(row[12])
             )
+    with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
+        reader = csv.reader(fp, delimiter=",", quotechar='"')
+        data_read = [row for row in reader]
+        for row in data_read[1::]:
+            q = None
+            if row[6] != '':
+                q = datetime.datetime.strptime(row[6], "%Y-%m-%d").date()
+                category = Category.objects.get(id=int(row[2]))
+                client = Client.objects.get(id=int(row[1]))
+            _, created = Subscription.objects.get_or_create(
+                id=row[0],
+                client_id=client,
+                product_category=category,
+                product_company=row[3],
+                amount=float(row[4]),
+                date_start=datetime.datetime.strptime(row[5], "%Y-%m-%d").date(),
+                date_end=q
+            )
     with open("analytics/transactions.csv", encoding='utf-8') as fp:
         reader = csv.reader(fp, delimiter=",", quotechar='"')
         data_read = [row for row in reader]
         for row in data_read[1::]:
             q = datetime.datetime.strptime(row[6], '%Y-%m-%d %H:%M:%S')
             q = pytz.utc.localize(q)
+            category = Category.objects.get(id=int(row[2]))
+            client = Client.objects.get(id=int(row[1]))
             _, created = Transaction.objects.get_or_create(
                 id=row[0],
-                client_id=int(row[1]),
-                product_category=int(row[2]),
+                client_id=client,
+                product_category=category,
                 product_company=row[3],
                 subtype=row[4],
                 amount=float(row[5]),
