@@ -46,4 +46,3 @@ Cоздать суперпользователя:
 [knyht](https://github.com/knyht) - Разработка модели рекомендатлньой системы на машинном обучение.
 
 [AleksandrRadist](https://github.com/AleksandrRadist) - Проектирование и разработка сайта и API.
-

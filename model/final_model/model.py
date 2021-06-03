@@ -35,7 +35,7 @@ def model():
         return fscore_precision
 
     # top k рекомендаций
-    top_k = 1
+    top_k = 10
 
     # соединение с базой данных PostgreSQL
     db_connect = psycopg2.connect(
@@ -66,13 +66,14 @@ def model():
     dict_category_clients = {}
     data_true.reset_index(inplace=True)
     for row in range(data_true.shape[0]):
-        category = data_true.loc[row, 'prediction_svd'][0]
+        categories = data_true.loc[row, 'prediction_svd']
         client = data_true.loc[row, 'client_id']
-        if category not in dict_category_clients.keys():
-            dict_category_clients[category] = []
-            dict_category_clients[category].append(client)
-        else:
-            dict_category_clients[category].append(client)
+        for category in categories:
+            if category not in dict_category_clients.keys():
+                dict_category_clients[category] = []
+                dict_category_clients[category].append(client)
+            else:
+                dict_category_clients[category].append(client)
 
     return dict_category_clients, fscore
 
