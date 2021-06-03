@@ -1,4 +1,4 @@
-from analytics.models import Order, Message, CommercialInfo
+from analytics.models import Order, Message, CommercialInfo, Client
 from rest_framework import serializers
 import datetime
 

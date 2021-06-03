@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from analytics.utils import commercial_fake_forecast_info, get_recommendation_model_data
 from .serializers import (OrderSerializer, OrderPublicSerializer, OrderWriteSerializer, MessageSerializer,
                           MessagePublicSerializer, MessageWriteSerializer, CommercialInfoPublicSerializer,
                           CommercialInfoSerializer)
@@ -55,22 +55,26 @@ def api_orders(request):
         serializer = OrderWriteSerializer(data=request.data)
         if serializer.is_valid():
             category = Category.objects.get(name=serializer.validated_data['category'])
-            transactions = Transaction.objects.filter(product_category=category.id)
-            clients = []
-            for i in transactions.values('client_id').distinct():
-                clients.append(i['client_id'])
-            clients = clients
-            clients_number = len(clients)
             delta = serializer.validated_data['date_end'] - serializer.validated_data['date_start']
             days = delta.days + 1
-            price = (days // 7 + 1) * 20 * clients_number
             code = uuid.uuid4().hex[:10].upper()
-            serializer.save(clients=clients,
-                            clients_number=clients_number,
-                            price=price,
-                            days=days,
+            serializer.save(days=days,
                             code=code)
             order = Order.objects.get(code=code)
+            data = get_recommendation_model_data('version1')
+            clients = []
+            if data.filter(category=category).exists():
+                clients = data.get(category=category).clients
+            for i in clients.all():
+                order.clients.add(i)
+            order.clients_number = order.clients.count()
+            order.price = (days // 7 + 1) * 20 * order.clients_number
+            forecast_data = commercial_fake_forecast_info(order)
+            order.forecast_conversion_rate = forecast_data['conversion_rate']
+            order.forecast_click_through_rate = forecast_data['click_through_rate']
+            order.forecast_cost_per_action = forecast_data['cpa']
+            order.forecast_cost_per_click = forecast_data['cpc']
+            order.save()
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':
@@ -95,24 +99,26 @@ def api_orders_public(request):
         serializer = OrderWriteSerializer(data=request.data)
         if serializer.is_valid():
             category = Category.objects.get(name=serializer.validated_data['category'])
-            transactions = Transaction.objects.filter(product_category=category.id)
-            transactions_number = transactions.count()
-            clients = []
-            for i in transactions.values('client_id').distinct():
-                clients.append(i['client_id'])
-            clients = clients
-            clients_number = len(clients)
             delta = serializer.validated_data['date_end'] - serializer.validated_data['date_start']
             days = delta.days + 1
-            price = (days // 7 + 1) * 20 * clients_number
             code = uuid.uuid4().hex[:10].upper()
-            serializer.save(transactions_number=transactions_number,
-                            clients=clients,
-                            clients_number=clients_number,
-                            price=price,
-                            days=days,
+            serializer.save(days=days,
                             code=code)
             order = Order.objects.get(code=code)
+            data = get_recommendation_model_data('version1')
+            clients = []
+            if data.filter(category=category).exists():
+                clients = data.get(category=category).clients
+            for i in clients.all():
+                order.clients.add(i)
+            order.clients_number = order.clients.count()
+            order.price = (days // 7 + 1) * 20 * order.clients_number
+            forecast_data = commercial_fake_forecast_info(order)
+            order.forecast_conversion_rate = forecast_data['conversion_rate']
+            order.forecast_click_through_rate = forecast_data['click_through_rate']
+            order.forecast_cost_per_action = forecast_data['cpa']
+            order.forecast_cost_per_click = forecast_data['cpc']
+            order.save()
             return Response(OrderPublicSerializer(order).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

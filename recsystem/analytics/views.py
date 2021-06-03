@@ -1,91 +1,18 @@
-import csv
 import datetime
 import uuid
-import pytz
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from recsystem.settings import paginator_items_on_page
+
 from .forms import OrderForm, MessageForm
-from .models import Client, Category, Transaction, Subscription, Order, Message, CommercialInfo
+from .models import Category, Order, Message, CommercialInfo
 from .utils import get_clients_data_gender, get_clients_data_age, \
     commercial_fake_info, get_recommendation_model_data, commercial_fake_forecast_info
-from django.urls import reverse
-import random
-
-
-def load(request):
-    with open("analytics/fgh.csv", encoding='utf-8') as fp:
-        reader = csv.reader(fp, delimiter=",", quotechar='"')
-        data_read = [row for row in reader]
-        for row in data_read[1::]:
-            _, created = Category.objects.get_or_create(
-                id=row[0],
-                name=row[1],
-                description=row[2],
-                mcc_code=row[3]
-            )
-    with open("analytics/clients.csv", encoding='utf-8') as fp:
-        reader = csv.reader(fp, delimiter=",", quotechar='"')
-        data_read = [row for row in reader]
-        for row in data_read[1::]:
-            q = 0
-            if row[9] != '':
-                q = float(row[9])
-            _, created = Client.objects.get_or_create(
-                id=row[0],
-                fullname=row[1],
-                address=row[2],
-                phone_number=row[3],
-                email=row[4],
-                workplace=row[5],
-                birthdate=datetime.datetime.strptime(row[6], "%Y-%m-%d").date(),
-                registration_date=datetime.datetime.strptime(row[7], "%Y-%m-%d").date(),
-                gender=row[8],
-                income=q,
-                expenses=float(row[10]),
-                credit=bool(row[11]),
-                deposit=bool(row[12])
-            )
-    with open("analytics/subscriptions.csv", encoding='utf-8') as fp:
-        reader = csv.reader(fp, delimiter=",", quotechar='"')
-        data_read = [row for row in reader]
-        for row in data_read[1::]:
-            q = None
-            if row[6] != '':
-                q = datetime.datetime.strptime(row[6], "%Y-%m-%d").date()
-                category = Category.objects.get(id=int(row[2]))
-                client = Client.objects.get(id=int(row[1]))
-            _, created = Subscription.objects.get_or_create(
-                id=row[0],
-                client_id=client,
-                product_category=category,
-                product_company=row[3],
-                amount=float(row[4]),
-                date_start=datetime.datetime.strptime(row[5], "%Y-%m-%d").date(),
-                date_end=q
-            )
-    with open("analytics/transactions.csv", encoding='utf-8') as fp:
-        reader = csv.reader(fp, delimiter=",", quotechar='"')
-        data_read = [row for row in reader]
-        for row in data_read[1::]:
-            q = datetime.datetime.strptime(row[6], '%Y-%m-%d %H:%M:%S')
-            q = pytz.utc.localize(q)
-            category = Category.objects.get(id=int(row[2]))
-            client = Client.objects.get(id=int(row[1]))
-            _, created = Transaction.objects.get_or_create(
-                id=row[0],
-                client_id=client,
-                product_category=category,
-                product_company=row[3],
-                subtype=row[4],
-                amount=float(row[5]),
-                date=q,
-                transaction_type=row[7]
-            )
-    return render(request, 'index.html')
 
 
 def order_new(request):
@@ -94,17 +21,18 @@ def order_new(request):
         if form.is_valid():
             order = form.save(commit=False)
             category = Category.objects.get(name=order.category)
+            delta = order.date_end - order.date_start
+            order.days = delta.days + 1
+            order.code = uuid.uuid4().hex[:10].upper()
+            order.save()
             data = get_recommendation_model_data('version1')
             clients = []
             if data.filter(category=category).exists():
                 clients = data.get(category=category).clients
-            order.clients = clients
-            order.clients_number = len(order.clients)
-            delta = order.date_end - order.date_start
-            order.days = delta.days + 1
-            price = (order.days // 7 + 1) * 20 * order.clients_number
-            order.price = price
-            order.code = uuid.uuid4().hex[:10].upper()
+            for i in clients.all():
+                order.clients.add(i)
+            order.clients_number = order.clients.count()
+            order.price = (order.days // 7 + 1) * 20 * order.clients_number
             forecast_data = commercial_fake_forecast_info(order)
             order.forecast_conversion_rate = forecast_data['conversion_rate']
             order.forecast_click_through_rate = forecast_data['click_through_rate']

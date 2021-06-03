@@ -59,9 +59,9 @@ class Category(models.Model):
 
 class Transaction(models.Model):
     id = models.IntegerField(primary_key=True)
-    client_id = models.IntegerField()
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     product_company = models.CharField(max_length=100)
-    product_category = models.IntegerField()
+    product_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subtype = models.CharField(max_length=20)
     amount = models.FloatField()
     date = models.DateTimeField()
@@ -70,8 +70,8 @@ class Transaction(models.Model):
 
 class Subscription(models.Model):
     id = models.IntegerField(primary_key=True)
-    client_id = models.IntegerField()
-    product_category = models.IntegerField()
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    product_category = models.ForeignKey(Category, on_delete=models.CASCADE)
     product_company = models.CharField(max_length=100)
     date_start = models.DateField()
     date_end = models.DateField(null=True)
@@ -84,7 +84,7 @@ class Order(models.Model):
     company_name = models.CharField(max_length=100, default='')
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=50)
     clients_number = models.IntegerField(default=0)
-    clients = models.JSONField(null=True, blank=True)
+    clients = models.ManyToManyField(Client, blank=True)
     date_start = models.DateField(default=datetime.date.today)
     date_end = models.DateField(default=datetime.date.today)
     days = models.IntegerField(default=0)
@@ -109,23 +109,27 @@ class Message(models.Model):
 
 
 class CommercialInfo(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='commercial_info')
+    order = models.OneToOneField(Order, on_delete=models.CASCADE,
+                                 related_name='commercial_info')
     shown_number = models.IntegerField(default=0)
     clicked_number = models.IntegerField(default=0)
-    shown_clients = models.JSONField(null=True, blank=True)
-    clicked_clients = models.JSONField(null=True, blank=True)
-    performed_action_clients = models.JSONField(null=True, blank=True)
+    shown_clients = models.ManyToManyField(Client, related_name='commercial_shown_clients',
+                                           blank=True)
+    clicked_clients = models.ManyToManyField(Client, related_name='commercial_clicked_clients',
+                                             blank=True)
+    performed_action_clients = models.ManyToManyField(Client, related_name='commercial_performed_action_clients',
+                                                      blank=True)
     performed_action_number = models.IntegerField(default=0)
 
 
 class RecommendationData(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    clients = models.JSONField()
+    clients = models.ManyToManyField(Client, blank=True)
 
 
 class RecommendationModel(models.Model):
     name = models.CharField(max_length=200)
-    data = models.ManyToManyField(RecommendationData, null=True, blank=True)
+    data = models.ManyToManyField(RecommendationData, blank=True)
     last_update = models.DateTimeField(blank=True, null=True)
     f_score = models.FloatField(default=0)
 
