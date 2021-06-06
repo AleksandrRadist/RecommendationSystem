@@ -5,9 +5,8 @@ import random
 import pytz
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
-from recsystem.settings import updated_model_data
 
-from .models import Client, CommercialInfo, RecommendationModel, RecommendationData, Category, Subscription, Transaction
+from .models import Client, CommercialInfo, RecommendationModel, Category, Subscription, Transaction
 
 
 def get_clients_data_gender(clients):
@@ -52,24 +51,6 @@ def commercial_fake_info(info_id):
 
 def get_recommendation_model_data(name):
     model = RecommendationModel.objects.get(name=name)
-    if model.last_update is None or model.last_update.date() != datetime.datetime.now().date():
-        model_data, f = updated_model_data()
-        for i in model_data.keys():
-            category = Category.objects.get(id=i)
-            if model.data.filter(category=category).exists():
-                data = RecommendationData.objects.get(category=category)
-                data.clients = model_data[i]
-                data.save()
-            else:
-                data = RecommendationData.objects.create(category=category)
-                for j in model_data[i]:
-                    client = Client.objects.get(id=j)
-                    data.clients.add(client)
-                data.save()
-                model.data.add(data)
-        model.last_update = datetime.datetime.now()
-        model.f_score = f
-        model.save()
     return model.data.all()
 
 
